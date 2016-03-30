@@ -28,20 +28,28 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.model.Mapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.STG;
+import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.techfile.booleanparser.model.TechVariable;
 
 public class VerilogOutput {
-
     private static final String linebreak = System.getProperty("line.separator");
 
-    public static String toV(STG stg, Netlist netlist, String resetname) {
+    private StateGraph          stategraph;
+    private Netlist             netlist;
+    private String              resetname;
 
+    public VerilogOutput(StateGraph stategraph, Netlist netlist, String resetname) {
+        this.stategraph = stategraph;
+        this.netlist = netlist;
+        this.resetname = resetname;
+    }
+
+    public String toV() {
         SortedSet<String> inputs = new TreeSet<String>();
         SortedSet<String> outputs = new TreeSet<String>();
         SortedSet<String> wires = new TreeSet<String>();
-        for(Signal sig : stg.getSignals()) {
+        for(Signal sig : stategraph.getSTG().getSignals()) {
             switch(sig.getType()) {
                 case dummy:
                     break;
@@ -118,5 +126,4 @@ public class VerilogOutput {
 
         return str.toString();
     }
-
 }

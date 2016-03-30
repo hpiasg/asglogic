@@ -20,54 +20,53 @@ package de.uni_potsdam.hpi.asg.logictool;
  */
 
 import java.util.Arrays;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.logging.log4j.Logger;
 
-import de.uni_potsdam.hpi.asg.common.io.FileHelper;
 import de.uni_potsdam.hpi.asg.common.io.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.io.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.io.Zipper;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
-import de.uni_potsdam.hpi.asg.logictool.io.VerilogOutput;
-import de.uni_potsdam.hpi.asg.logictool.mapping.GateMerger;
-import de.uni_potsdam.hpi.asg.logictool.mapping.TechnologyMapper;
-import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
-import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.Arch;
-import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
-import de.uni_potsdam.hpi.asg.logictool.reset.decision.AdvancedCElementResetDecider;
-import de.uni_potsdam.hpi.asg.logictool.reset.decision.FullReset;
-import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider;
-import de.uni_potsdam.hpi.asg.logictool.reset.insert.ResetInserter;
-import de.uni_potsdam.hpi.asg.logictool.reset.insert.SimpleCElementResetInserter;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraphComputer;
-import de.uni_potsdam.hpi.asg.logictool.stg.GFile;
-import de.uni_potsdam.hpi.asg.logictool.stg.csc.CSCSolver;
-import de.uni_potsdam.hpi.asg.logictool.stg.csc.ExternalCSCSolver;
-import de.uni_potsdam.hpi.asg.logictool.stg.csc.ExternalCSCSolver.ExternalCSCSolverConfig;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.STG;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.CElementSynthesis;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.EspressoOptimiser;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.Synthesis;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
-import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
-import net.sf.javabdd.BDDFactory;
-import net.sf.javabdd.JFactory;
 
 public class LogicMain {
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
     public static Config                   config;
 
-    public static void main(String[] args) throws Exception {
-        int status = main2(args);
+    /**
+     * Main entrance of program.
+     * 
+     * @param args
+     *            see {@link LogicCommandlineOptions}
+     */
+    public static void main(String[] args) {
+        int status = -1;
+        try {
+            status = main2(args);
+        } catch(Exception e) {
+            if(options != null && options.isDebug()) {
+                e.printStackTrace();
+            } else {
+                System.err.println("Something really bad happend");
+                status = -2;
+            }
+        }
         System.exit(status);
     }
 
+    /**
+     * Sets up all helpers (command line parser, configuration, logger, working
+     * directory). Calls execute.
+     * 
+     * @param args
+     *            see {@link LogicCommandlineOptions}
+     * @return Status code:
+     *         -1: Command line problem
+     *         0: Everything okay
+     *         1: Something failed
+     * @throws Exception
+     */
     public static int main2(String[] args) throws Exception {
         long start = System.currentTimeMillis();
         int status = -1;
@@ -92,160 +91,16 @@ public class LogicMain {
         return status;
     }
 
+    /**
+     * Calls the logic synthesis flow
+     * 
+     * @return Status code:
+     *         0: Everything okay
+     *         1: Something failed
+     */
     private static int execute() {
-
-        /*
-         * Switches
-         */
-        Arch arch = null;
-        switch(options.getArch()) {
-            case "sC":
-                arch = Arch.standardC;
-                break;
-            default:
-                logger.warn("Architecture '" + options.getArch() + "' undefined. Using default 'gC'");
-            case "gC":
-                arch = Arch.generalisedC;
-                break;
-        }
-
-        CSCSolver cscsolver = null;
-        switch(options.getCscSolving()) {
-            case "M":
-                cscsolver = new ExternalCSCSolver(ExternalCSCSolverConfig.mpsat);
-                break;
-            default:
-                logger.warn("CSC solver '" + options.getCscSolving() + "' undefined. Using default 'none'");
-            case "N":
-                break;
-            case "P":
-                cscsolver = new ExternalCSCSolver(ExternalCSCSolverConfig.petrify);
-                break;
-        }
-
-        /*
-         * STG & state graph
-         * 
-         */
-        STG stg = GFile.importFromFile(options.getGfile());
-        if(stg == null) {
-            return 1;
-        }
-        SortedSet<Signal> sortedSignals = new TreeSet<Signal>(stg.getSignals());
-        logger.info("Number of signals: " + sortedSignals.size());
-        // StateGraph
-        StateGraphComputer graphcomp = new StateGraphComputer(stg, sortedSignals, cscsolver);
-        StateGraph stateGraph = graphcomp.compute();
-        if(stateGraph == null) {
-            logger.error("Failed to generate state graph");
-            return 1;
-        }
-
-//		for(State s : stateGraph.getStates()) {
-//			System.out.println(s.toString() + "\t" + s.getId());
-//		}
-
-        /*
-         *  Data structures
-         */
-
-        // Reset
-        String resetname = "_reset";
-        Reset reset = new Reset(resetname, stateGraph);
-        ResetDecider decider = null;
-        switch(options.getResettype()) {
-            case "full":
-                decider = new FullReset(reset);
-                break;
-            default:
-                logger.warn("Reset mechanism '" + options.getResettype() + "' undefined. Using default 'ondemand'");
-            case "ondemand":
-                decider = new AdvancedCElementResetDecider(reset, arch);
-                break;
-
-        }
-        ResetInserter inserter = new SimpleCElementResetInserter(reset, arch);
-        reset.setDecider(decider);
-        reset.setInserter(inserter);
-
-        // Netlist
-        int nodesize = 10000;
-        BDDFactory storage = JFactory.init(nodesize, nodesize / 4);
-        storage.setCacheRatio(4f);
-        Netlist netlist = new Netlist(storage, stateGraph, reset);
-
-        // Synthesis
-        Synthesis syn = new CElementSynthesis(stateGraph, netlist, resetname, arch);
-        EspressoOptimiser optimiser = new EspressoOptimiser();
-
-        // Techmapper
-        TechLibrary techlib = TechLibrary.importFromFile(options.getTechnology(), storage);
-        if(techlib == null) {
-            return 1;
-        }
-        TechnologyMapper map = new TechnologyMapper(stateGraph, netlist, techlib, syn, options.isUnsafeanddeco());
-        GateMerger merge = new GateMerger(netlist, map);
-
-        /*
-         * Flow
-         */
-        if(!syn.doTableSynthesis()) {
-            logger.error("Table synthesis failed");
-            return 1;
-        }
-//		if(!reset.insertPreOptimisation(syn.getTable())) {
-//			logger.error("Reset insertion (pre-optimisation) failed");
-//			return 1;
-//		}
-        EspressoTable opttable = optimiser.espressoMinimization(syn.getTable());
-        if(opttable == null) {
-            logger.error("Optimisation failed");
-            return 1;
-        }
-        if(!syn.doTableCheck(opttable)) {
-            logger.error("Table check failed");
-            return 1;
-        }
-        if(!syn.doFunctionSynthesis()) {
-            logger.error("Function synthesis failed");
-            return 1;
-        }
-        if(!reset.decide(netlist)) {
-            logger.error("Reset decision failed");
-            return 1;
-        }
-        if(!syn.doComplementaryCheck(reset)) {
-            logger.error("Complementary check failed");
-            return 1;
-        }
-        if(!reset.insertPostSynthesis(netlist)) {
-            logger.error("Reset insertion (pre-synthesis) failed");
-            return 1;
-        }
-        if(!map.mapAll()) {
-            logger.error("Technology mapping failed");
-            return 1;
-        }
-        if(!syn.doPostMappingSynthesis(map)) {
-            logger.error("Synthesis Post-Technologymapping failed");
-            return 1;
-        }
-
-//		new NetlistGraph(netlist, null, true);
-
-        if(!merge.merge()) {
-            logger.warn("Technology merging failed");
-        }
-
-        logger.debug("Number of BDD nodes: " + storage.getNodeNum());
-        // verilog output
-        if(!FileHelper.getInstance().writeFile(options.getSynthesisOutfile(), VerilogOutput.toV(stg, netlist, resetname))) {
-            logger.error("Writing out synthesis file failed");
-            return 1;
-        }
-
-        logger.info("Synthesis successful: " + options.getSynthesisOutfile());
-        return 0;
+        Flow flow = new Flow(options);
+        return flow.execute();
     }
 
     private static boolean zipWorkfile() {
