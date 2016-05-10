@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uni_potsdam.hpi.asg</groupId>
 	<artifactId>asglogic</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<organization>
 		<name>Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH</name>
 		<url>http://www.hpi.uni-potsdam.de</url>
@@ -25,8 +25,8 @@
 	</licenses>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<desij.version>3.0.0-rc2</desij.version>
-		<common.version>1.0.0-SNAPSHOT</common.version>
+		<desij.version>3.0.0</desij.version>
+		<common.version>1.0.0</common.version>
 	</properties>
 	<build>
 		<resources>
