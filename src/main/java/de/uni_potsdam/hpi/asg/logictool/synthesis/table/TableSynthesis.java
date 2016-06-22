@@ -54,7 +54,7 @@ public abstract class TableSynthesis {
     }
 
     protected EspressoTable createEspressoTable() {
-        int num = stategraph.getSTG().getSignals().size();
+        int num = stategraph.getAllSignals().size();
         if(resetname != null) {
             num++;
         }

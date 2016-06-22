@@ -198,7 +198,13 @@ public class Flow {
         if(stg == null) {
             return null;
         }
-        SortedSet<Signal> sortedSignals = new TreeSet<Signal>(stg.getSignals());
+        SortedSet<Signal> sortedSignals = new TreeSet<Signal>();
+        for(Signal sig : stg.getSignals()) {
+            if(!sig.isDummy()) {
+                sortedSignals.add(sig);
+            }
+        }
+
         logger.info("Number of signals: " + sortedSignals.size());
 
         CSCSolver cscsolver = chooseCSCsolver();
