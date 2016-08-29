@@ -41,7 +41,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Sets;
 
-import de.uni_potsdam.hpi.asg.common.io.WorkingdirGenerator;
+import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State.Value;
 import de.uni_potsdam.hpi.asg.logictool.stg.GFile;
 import de.uni_potsdam.hpi.asg.logictool.stg.csc.CSCSolver;

@@ -34,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import de.uni_potsdam.hpi.asg.common.io.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.logictool.techfile.booleanparser.model.TechTerm;
 import de.uni_potsdam.hpi.asg.logictool.techfile.booleanparser.model.TechVariable;
 import de.uni_potsdam.hpi.asg.logictool.techfile.booleanparser.parser.BooleanExpressionParser;

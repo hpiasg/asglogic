@@ -21,7 +21,7 @@ package de.uni_potsdam.hpi.asg.logictool.synthesis;
 
 import java.io.File;
 
-import de.uni_potsdam.hpi.asg.common.io.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable.TableType;

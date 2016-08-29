@@ -25,7 +25,7 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.uni_potsdam.hpi.asg.common.io.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.logictool.io.VerilogOutput;
 import de.uni_potsdam.hpi.asg.logictool.mapping.GateMerger;
 import de.uni_potsdam.hpi.asg.logictool.mapping.TechnologyMapper;

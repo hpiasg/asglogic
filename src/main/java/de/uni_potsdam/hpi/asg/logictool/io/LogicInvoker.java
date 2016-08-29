@@ -26,9 +26,9 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.uni_potsdam.hpi.asg.common.io.FileHelper;
-import de.uni_potsdam.hpi.asg.common.io.Invoker;
-import de.uni_potsdam.hpi.asg.common.io.ProcessReturn;
+import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.Invoker;
+import de.uni_potsdam.hpi.asg.common.iohelper.ProcessReturn;
 import de.uni_potsdam.hpi.asg.logictool.LogicMain;
 
 public class LogicInvoker extends Invoker {
