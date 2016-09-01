@@ -22,10 +22,10 @@ package de.uni_potsdam.hpi.asg.logictool.reset.insert;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider.ResetDecision;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable.EspressoValue;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTerm;

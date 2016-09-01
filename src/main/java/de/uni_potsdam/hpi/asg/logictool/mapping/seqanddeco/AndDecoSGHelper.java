@@ -31,12 +31,12 @@ import org.apache.logging.log4j.Logger;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
+import de.uni_potsdam.hpi.asg.common.stg.GFile;
+import de.uni_potsdam.hpi.asg.common.stg.model.STG;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraphComputer;
-import de.uni_potsdam.hpi.asg.logictool.stg.GFile;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.STG;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 
 public class AndDecoSGHelper {
     private static final Logger logger = LogManager.getLogger();

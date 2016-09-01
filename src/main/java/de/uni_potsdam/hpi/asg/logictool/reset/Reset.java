@@ -21,12 +21,12 @@ package de.uni_potsdam.hpi.asg.logictool.reset;
 
 import java.util.Map;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider.ResetDecision;
 import de.uni_potsdam.hpi.asg.logictool.reset.insert.ResetInserter;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTerm;
 

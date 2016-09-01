@@ -22,8 +22,8 @@ package de.uni_potsdam.hpi.asg.logictool.srgraph;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Place;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Transition;
+import de.uni_potsdam.hpi.asg.common.stg.model.Place;
+import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
 
 public class SimulationStep {
 

@@ -22,9 +22,9 @@ package de.uni_potsdam.hpi.asg.logictool.reset.decision;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 
 public abstract class ResetDecider {
 

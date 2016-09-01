@@ -1,5 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.reset.decision;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+
 /*
  * Copyright (C) 2015 Norman Kluge
  * 
@@ -21,7 +23,6 @@ package de.uni_potsdam.hpi.asg.logictool.reset.decision;
 
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 
 public class FullReset extends ResetDecider {
 

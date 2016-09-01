@@ -21,7 +21,7 @@ package de.uni_potsdam.hpi.asg.logictool.mapping.seqanddeco;
 
 import java.util.Set;
 
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import net.sf.javabdd.BDD;
 
 public class PartitionPart {

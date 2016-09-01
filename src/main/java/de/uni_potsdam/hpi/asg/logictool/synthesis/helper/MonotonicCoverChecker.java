@@ -34,10 +34,10 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.CFRegion;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.Cubes;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;

@@ -31,11 +31,11 @@ import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.NoMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal.SignalType;
 
 public class NetlistGraph extends JFrame {
     private static final long serialVersionUID = -3433426370569233566L;

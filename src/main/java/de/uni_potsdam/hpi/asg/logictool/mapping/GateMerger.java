@@ -36,6 +36,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Sets;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDHelper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.merge.MergeSimulationStep;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
@@ -45,7 +46,6 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import net.sf.javabdd.BDD;
 
 public class GateMerger {

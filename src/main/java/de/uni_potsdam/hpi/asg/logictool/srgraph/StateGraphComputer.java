@@ -42,14 +42,14 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.Sets;
 
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
+import de.uni_potsdam.hpi.asg.common.stg.GFile;
+import de.uni_potsdam.hpi.asg.common.stg.model.Place;
+import de.uni_potsdam.hpi.asg.common.stg.model.STG;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
+import de.uni_potsdam.hpi.asg.common.stg.model.Transition.Edge;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State.Value;
-import de.uni_potsdam.hpi.asg.logictool.stg.GFile;
-import de.uni_potsdam.hpi.asg.logictool.stg.csc.CSCSolver;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Place;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.STG;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Transition;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Transition.Edge;
+import de.uni_potsdam.hpi.asg.logictool.srgraph.csc.CSCSolver;
 
 public class StateGraphComputer {
     private static final Logger logger        = LogManager.getLogger();

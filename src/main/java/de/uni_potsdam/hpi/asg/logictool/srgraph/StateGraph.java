@@ -22,8 +22,8 @@ package de.uni_potsdam.hpi.asg.logictool.srgraph;
 import java.util.Set;
 import java.util.SortedSet;
 
-import de.uni_potsdam.hpi.asg.logictool.stg.model.STG;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.STG;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 
 public class StateGraph {
 
