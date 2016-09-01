@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.srgraph;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2016 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -34,54 +34,14 @@ import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
+import de.uni_potsdam.hpi.asg.common.stggraph.AbstractState;
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 
-public class State implements Comparable<State> {
-    private static final Logger logger = LogManager.getLogger();
-    private static int          sid    = 0;
+public class State extends AbstractState<State> implements Comparable<State> {
+    private static final Logger      logger = LogManager.getLogger();
 
-    public enum Value {
-        low("0", 0), high("1", 2), rising("+", 1), falling("-", 3);
-
-        private String str;
-        private int    val;
-
-        Value(String str_n, int val_n) {
-            str = str_n;
-            val = val_n;
-        }
-
-        @Override
-        public String toString() {
-            return str;
-        }
-
-        public int compare(Value v2) {
-            return Integer.compare(val, v2.val);
-        }
-
-        public Value normalise() {
-            switch(this) {
-                case falling:
-                    return Value.high;
-                case high:
-                    return Value.high;
-                case low:
-                    return Value.low;
-                case rising:
-                    return Value.low;
-                default:
-                    return null;
-            }
-        }
-    }
-
-    private Set<State>               prevStates;
-    private Map<Transition, State>   nextStates;
     private SortedMap<Signal, Value> state;
     private BitSet                   binaryRepresentation;
-    //private String str;
-    private int                      id;
     private Set<State>               equallyEncodedStates;
 
     public State() {
@@ -89,9 +49,9 @@ public class State implements Comparable<State> {
         this.nextStates = new HashMap<Transition, State>();
         this.prevStates = new HashSet<State>();
         this.binaryRepresentation = null;
-        this.id = sid++;
     }
 
+    @Override
     public void setSignalState(Signal sig, Value val) {
         if(sig.getType() == SignalType.dummy) {
             logger.error("Dummy set");
@@ -105,35 +65,14 @@ public class State implements Comparable<State> {
         }
     }
 
+    @Override
     public boolean isSignalSet(Signal sig) {
         return this.state.containsKey(sig);
     }
 
+    @Override
     public Map<Signal, Value> getStateValues() {
         return state;
-    }
-
-    public void addEdgeNextState(State state, Transition t) {
-        if(this.nextStates.containsValue(state)) {
-            Transition t1 = null;
-            for(Entry<Transition, State> entry : nextStates.entrySet()) {
-                if(entry.getValue() == state) {
-                    t1 = entry.getKey();
-                    break;
-                }
-            }
-            logger.warn("Doubled edge: S" + id + " => S" + state.id + ", Transitions: Old: " + t1 + ", New: " + t);
-        }
-        this.nextStates.put(t, state);
-        state.prevStates.add(this);
-    }
-
-    public Map<Transition, State> getNextStates() {
-        return nextStates;
-    }
-
-    public Set<State> getPrevStates() {
-        return prevStates;
     }
 
     public BitSet getBinaryRepresentationNormalised(SortedSet<Signal> sortedSignals) {
@@ -207,10 +146,6 @@ public class State implements Comparable<State> {
     @Override
     public int hashCode() {
         return this.id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void addEquallyEncodedState(State state) {

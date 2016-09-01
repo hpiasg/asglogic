@@ -47,6 +47,7 @@ import com.google.common.collect.Sets.SetView;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
+import de.uni_potsdam.hpi.asg.common.stggraph.AbstractState.Value;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDHelper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.seqanddeco.AndDecoSGHelper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.seqanddeco.IOBehaviour;
@@ -64,7 +65,6 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.State.Value;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
