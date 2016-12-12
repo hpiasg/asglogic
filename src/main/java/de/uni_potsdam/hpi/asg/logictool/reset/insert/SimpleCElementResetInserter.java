@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.Arch;
@@ -33,7 +34,6 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotatio
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider.ResetDecision;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import net.sf.javabdd.BDD;
 

@@ -19,9 +19,9 @@ package de.uni_potsdam.hpi.asg.logictool.reset.decision;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 
 public class FullReset extends ResetDecider {
 

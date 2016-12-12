@@ -30,6 +30,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDHelper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.TechnologyMapper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
@@ -46,7 +47,6 @@ import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider.ResetDecision;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.function.CElementFunctionSynthesis;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.function.CElementFunctionSynthesis.ComplementaryDecision;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.helper.MonotonicCoverChecker;

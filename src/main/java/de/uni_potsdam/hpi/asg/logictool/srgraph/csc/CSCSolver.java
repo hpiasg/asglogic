@@ -1,7 +1,7 @@
-package de.uni_potsdam.hpi.asg.logictool.srgraph;
+package de.uni_potsdam.hpi.asg.logictool.srgraph.csc;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2016 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -19,12 +19,10 @@ package de.uni_potsdam.hpi.asg.logictool.srgraph;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.apache.commons.pool2.PooledObjectFactory;
-import org.apache.commons.pool2.impl.GenericObjectPool;
+import de.uni_potsdam.hpi.asg.common.stg.model.STG;
 
-public class SimulationStepPool extends GenericObjectPool<SimulationStep> {
+public interface CSCSolver {
 
-    public SimulationStepPool(PooledObjectFactory<SimulationStep> factory) {
-        super(factory);
-    }
+    public boolean solveCSC(STG stgin, String stgoutfile);
+
 }

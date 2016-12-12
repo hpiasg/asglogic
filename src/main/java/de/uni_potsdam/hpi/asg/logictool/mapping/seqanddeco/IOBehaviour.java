@@ -21,8 +21,8 @@ package de.uni_potsdam.hpi.asg.logictool.mapping.seqanddeco;
 
 import java.util.List;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Transition;
 
 public class IOBehaviour {
 

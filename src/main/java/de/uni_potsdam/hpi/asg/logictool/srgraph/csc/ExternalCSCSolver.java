@@ -1,4 +1,4 @@
-package de.uni_potsdam.hpi.asg.logictool.stg.csc;
+package de.uni_potsdam.hpi.asg.logictool.srgraph.csc;
 
 /*
  * Copyright (C) 2016 Norman Kluge
@@ -22,9 +22,9 @@ package de.uni_potsdam.hpi.asg.logictool.stg.csc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.uni_potsdam.hpi.asg.common.io.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
+import de.uni_potsdam.hpi.asg.common.stg.model.STG;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.STG;
 
 public class ExternalCSCSolver implements CSCSolver {
     private static final Logger logger = LogManager.getLogger();

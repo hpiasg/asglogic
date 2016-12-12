@@ -27,8 +27,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable.EspressoValue;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTerm;

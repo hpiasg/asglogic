@@ -36,6 +36,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDComparator;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDHelper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.Mapping;
@@ -44,8 +46,6 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.InternalArch;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal.SignalType;
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 

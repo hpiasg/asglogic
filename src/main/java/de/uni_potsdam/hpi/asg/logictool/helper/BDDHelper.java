@@ -1,7 +1,5 @@
 package de.uni_potsdam.hpi.asg.logictool.helper;
 
-import java.util.BitSet;
-
 /*
  * Copyright (C) 2015 Norman Kluge
  * 
@@ -21,6 +19,7 @@ import java.util.BitSet;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.util.BitSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -32,11 +31,12 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stggraph.AbstractState.Value;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.State.Value;
-import de.uni_potsdam.hpi.asg.logictool.stg.model.Signal;
+
 import net.sf.javabdd.BDD;
 
 public class BDDHelper {
