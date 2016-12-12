@@ -5,7 +5,7 @@ ASGlogic is a logic synthesiser, which generates a Verilog netlist from an STG s
 
 ### Installation ###
 
-Download and unpack the appropriate package for your operating system. All external tools needed for operation are included in the package. You don't have to install anything or make changes to environment variables. To run it you will need a Java runtime environment (JRE) v1.7 (or later).
+Download and unpack the appropriate package for your operating system (on UNIX with 64-bit architecture, 32-bit support is required). All external tools needed for operation are included in the package. You don't have to install anything or make changes to environment variables. To run it you will need a Java runtime environment (JRE) v1.7 (or later).
 
 
 ### Configuration ###
