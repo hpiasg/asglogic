@@ -27,6 +27,7 @@ import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
+import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
 
 public class LogicMain {
@@ -74,7 +75,7 @@ public class LogicMain {
         if(options.parseCmdLine(args)) {
             logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug());
             logger.debug("Args: " + Arrays.asList(args).toString());
-            config = Config.readIn(options.getConfigfile());
+            config = ConfigFile.readIn(options.getConfigfile());
             if(config == null) {
                 logger.error("Could not read config");
                 return 1;
