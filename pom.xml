@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uni_potsdam.hpi.asg</groupId>
 	<artifactId>asglogic</artifactId>
-	<version>0.1.4-SNAPSHOT</version>
+	<version>0.1.5-SNAPSHOT</version>
 	<organization>
 		<name>Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH</name>
 		<url>http://www.hpi.uni-potsdam.de</url>
@@ -25,8 +25,8 @@
 	</licenses>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<desij.version>3.1.0</desij.version>
-		<common.version>2.0.0</common.version>
+		<desij.version>3.1.1-SNAPSHOT</desij.version>
+		<common.version>2.0.0-SNAPSHOT</common.version>
 	</properties>
 	<build>
 		<resources>
@@ -160,10 +160,6 @@
 								<exec executable="cmd" osfamily="windows">
 									<arg line="/c move ${project.build.directory}/desij-${desij.version} ${project.build.directory}/desij" />
 								</exec>
-								
-								<move file="${project.build.directory}/desij/LICENSE.txt" tofile="${project.build.directory}/desij/bin/DesiJ_LICENSE.txt"/>
-								<move file="${project.build.directory}/desij/NOTICE.txt" tofile="${project.build.directory}/desij/bin/DesiJ_NOTICE.txt"/>
-								<move file="${project.build.directory}/desij/README.md" tofile="${project.build.directory}/desij/bin/DesiJ_README.md"/>
 							</target>
 						</configuration>
 					</execution>

@@ -33,17 +33,23 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<outputDirectory>config</outputDirectory>
 			<destName>logicconfig.xml</destName>
 		</file>
+		<file>
+			<source>LICENSE.txt</source>
+			<outputDirectory>legal</outputDirectory>
+			<destName>ASGlogic_LICENSE.txt</destName>
+		</file>
+		<file>
+			<source>NOTICE.txt</source>
+			<outputDirectory>legal</outputDirectory>
+			<destName>ASGlogic_NOTICE.txt</destName>
+		</file>
+		<file>
+			<source>README.md</source>
+			<outputDirectory>readme</outputDirectory>
+			<destName>ASGlogic_README.md</destName>
+		</file>
 	</files>
 	<fileSets>
-		<fileSet>
-			<directory>.</directory>
-			<outputDirectory>.</outputDirectory>
-			<includes>
-				<include>LICENSE.txt</include>
-				<include>NOTICE.txt</include>
-				<include>README.md</include>
-			</includes>
-		</fileSet>
 		<fileSet>
 			<directory>src/main/resources</directory>
 			<outputDirectory>.</outputDirectory>
