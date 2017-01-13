@@ -1,10 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2014 - 2017 Norman Kluge
+ 
+This file is part of ASGlogic.
+ 
+ASGlogic is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ASGlogic is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uni_potsdam.hpi.asg</groupId>
 	<artifactId>asglogic</artifactId>
-	<version>0.1.4</version>
+	<version>0.1.5</version>
 	<organization>
 		<name>Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH</name>
 		<url>http://www.hpi.uni-potsdam.de</url>
@@ -25,8 +44,8 @@
 	</licenses>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<desij.version>3.1.0</desij.version>
-		<common.version>2.0.0</common.version>
+		<desij.version>3.1.1</desij.version>
+		<common.version>2.0.1</common.version>
 	</properties>
 	<build>
 		<resources>
@@ -160,10 +179,6 @@
 								<exec executable="cmd" osfamily="windows">
 									<arg line="/c move ${project.build.directory}/desij-${desij.version} ${project.build.directory}/desij" />
 								</exec>
-								
-								<move file="${project.build.directory}/desij/LICENSE.txt" tofile="${project.build.directory}/desij/bin/DesiJ_LICENSE.txt"/>
-								<move file="${project.build.directory}/desij/NOTICE.txt" tofile="${project.build.directory}/desij/bin/DesiJ_NOTICE.txt"/>
-								<move file="${project.build.directory}/desij/README.md" tofile="${project.build.directory}/desij/bin/DesiJ_README.md"/>
 							</target>
 						</configuration>
 					</execution>

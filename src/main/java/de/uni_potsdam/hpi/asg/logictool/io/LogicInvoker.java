@@ -55,6 +55,7 @@ public class LogicInvoker extends Invoker {
         String[] command = convertCmd(LogicMain.config.toolconfig.espressocmd);
         if(command == null) {
             logger.error("Could not read espresso cmd String");
+            return null;
         }
         String[] params = {"-of", "-eonset", "-Dso", infile/*, " > ", outfile*/};
         ProcessReturn ret = invoke(command, params);
@@ -79,6 +80,7 @@ public class LogicInvoker extends Invoker {
         String[] cmd = convertCmd(LogicMain.config.toolconfig.desijcmd);
         if(cmd == null) {
             logger.error("Could not read desij cmd String");
+            return false;
         }
         ProcessReturn ret = invoke(cmd, params);
         return errorHandling(ret);
@@ -88,6 +90,7 @@ public class LogicInvoker extends Invoker {
         String[] command = convertCmd(LogicMain.config.toolconfig.petrifycmd);
         if(command == null) {
             logger.error("Could not read petrify cmd String");
+            return false;
         }
         String[] params = {"-csc", "-dead", "-o", outfile, "-log", logfile, infile};
         ProcessReturn ret = invoke(command, params);
@@ -123,6 +126,7 @@ public class LogicInvoker extends Invoker {
         String[] cmd2 = convertCmd(LogicMain.config.toolconfig.mpsatcmd);
         if(cmd2 == null) {
             logger.error("Could not read mpsat cmd string");
+            return false;
         }
         String[] params2 = {"-R", "-f", "-@", "-p0", "-cl", "../" + mcifile};
         ProcessReturn ret2 = invoke(cmd2, params2, tmpfolder);
