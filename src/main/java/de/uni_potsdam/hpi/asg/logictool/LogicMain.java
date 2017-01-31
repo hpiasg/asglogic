@@ -73,7 +73,7 @@ public class LogicMain {
         int status = -1;
         options = new LogicCommandlineOptions();
         if(options.parseCmdLine(args)) {
-            logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug());
+            logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug(), "/logic_log4j2.xml");
             logger.debug("Args: " + Arrays.asList(args).toString());
             config = ConfigFile.readIn(options.getConfigfile());
             if(config == null) {
