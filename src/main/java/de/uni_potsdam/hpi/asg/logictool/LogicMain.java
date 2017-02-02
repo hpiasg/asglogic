@@ -21,7 +21,9 @@ package de.uni_potsdam.hpi.asg.logictool;
 
 import java.util.Arrays;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.status.StatusLogger;
 
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
@@ -34,6 +36,10 @@ public class LogicMain {
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
     public static Config                   config;
+
+    static {
+        StatusLogger.getLogger().setLevel(Level.OFF);
+    }
 
     /**
      * Main entrance of program.
