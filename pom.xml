@@ -219,6 +219,11 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									<commandLineArguments>
 										<commandLineArgument>-cfg "$BASEDIR"/config/logicconfig.xml</commandLineArgument>
 									</commandLineArguments>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/logic_log4j2.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
 								</program>
 							</programs>
 							<repositoryLayout>flat</repositoryLayout>

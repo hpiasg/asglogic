@@ -21,9 +21,7 @@ package de.uni_potsdam.hpi.asg.logictool;
 
 import java.util.Arrays;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.status.StatusLogger;
 
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
@@ -37,9 +35,6 @@ public class LogicMain {
     private static LogicCommandlineOptions options;
     public static Config                   config;
 
-    static {
-        StatusLogger.getLogger().setLevel(Level.OFF);
-    }
 
     /**
      * Main entrance of program.
@@ -79,7 +74,7 @@ public class LogicMain {
         int status = -1;
         options = new LogicCommandlineOptions();
         if(options.parseCmdLine(args)) {
-            logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug(), "/logic_log4j2.xml");
+            logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug());
             logger.debug("Args: " + Arrays.asList(args).toString());
             config = ConfigFile.readIn(options.getConfigfile());
             if(config == null) {

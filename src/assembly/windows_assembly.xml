@@ -54,6 +54,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<directory>src/main/resources</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>
+				<include>config/**/*</include>
 				<include>tools/espresso/espresso.exe</include>
 				<include>tools/espresso/LICENSE.ESPRESSO.txt</include>
 				<include>tools/mpsat/LICENSE.MPSAT</include>
@@ -64,6 +65,9 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 				<include>tools/petrify/LICENSE.CYGWIN.txt</include>
 				<include>tools/petrify/cygwin1.dll</include>
 			</includes>
+			<excludes>
+				<exclude>config/logicconfig*</exclude>
+			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>target/bin</directory>
