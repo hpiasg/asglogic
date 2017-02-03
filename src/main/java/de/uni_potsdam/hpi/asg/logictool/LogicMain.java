@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2014 - 2016 Norman Kluge
+ * Copyright (C) 2014 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -19,22 +19,29 @@ package de.uni_potsdam.hpi.asg.logictool;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.io.File;
 import java.util.Arrays;
 
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
+import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
+import net.sf.javabdd.BDDFactory;
+import net.sf.javabdd.JFactory;
 
 public class LogicMain {
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
     public static Config                   config;
 
+    // Magic number: Initial node size of the BDD factory for the Netlist data structure.
+    private static final int               netlistNodesize = 10000;
 
     /**
      * Main entrance of program.
@@ -101,8 +108,42 @@ public class LogicMain {
      *         1: Something failed
      */
     private static int execute() {
-        Flow flow = new Flow(options);
+        BDDFactory storage = JFactory.init(netlistNodesize, netlistNodesize / 4);
+        storage.setCacheRatio(4f);
+
+        TechLibrary tech = readTechnology(options.getTechnology(), config.defaultTech, storage);
+        if(tech == null) {
+            logger.error("No technology found");
+            return 1;
+        }
+
+        Flow flow = new Flow(options, tech, storage);
         return flow.execute();
+    }
+
+    private static TechLibrary readTechnology(File optTech, String cfgTech, BDDFactory storage) {
+        if(optTech != null) {
+            if(optTech.exists()) {
+                logger.debug("Using options technology file: " + optTech.getAbsolutePath());
+                return TechLibrary.importFromFile(optTech, storage);
+            } else {
+                logger.warn("Options technology file " + optTech.getAbsolutePath() + " not found. Trying default from config");
+            }
+        }
+
+        if(cfgTech != null) {
+            File cfgTechFile = FileHelper.getInstance().replaceBasedir(cfgTech);
+            if(cfgTechFile.exists()) {
+                logger.debug("Using config technology file: " + cfgTechFile.getAbsolutePath());
+                return TechLibrary.importFromFile(cfgTechFile, storage);
+            } else {
+                logger.warn("Config technology file " + cfgTechFile.getAbsolutePath() + " not found.");
+            }
+        } else {
+            logger.warn("No default technology in config file defined");
+        }
+
+        return null;
     }
 
     private static boolean zipWorkfile() {

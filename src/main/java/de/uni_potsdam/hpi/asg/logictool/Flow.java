@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2014 - 2016 Norman Kluge
+ * Copyright (C) 2014 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -51,16 +51,14 @@ import de.uni_potsdam.hpi.asg.logictool.synthesis.Synthesis;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
 import net.sf.javabdd.BDDFactory;
-import net.sf.javabdd.JFactory;
 
 public class Flow {
-    private static final Logger     logger          = LogManager.getLogger();
-    // Magic number: Initial node size of the BDD factory for the Netlist data structure.
-    private static final int        netlistNodesize = 10000;
-    private static final String     resetname       = "_reset";
+    private static final Logger     logger    = LogManager.getLogger();
+    private static final String     resetname = "_reset";
 
     private LogicCommandlineOptions options;
-
+    private TechLibrary             techlib;
+    private BDDFactory              storage;
     private Netlist                 netlist;
 
     // Flow agents
@@ -71,8 +69,10 @@ public class Flow {
     private GateMerger              merge;
     private VerilogOutput           verilogout;
 
-    public Flow(LogicCommandlineOptions options) {
+    public Flow(LogicCommandlineOptions options, TechLibrary techlib, BDDFactory storage) {
         this.options = options;
+        this.techlib = techlib;
+        this.storage = storage;
     }
 
     public int execute() {
@@ -167,8 +167,6 @@ public class Flow {
         reset = generateResetFlowAgents(arch, stateGraph);
 
         // Netlist - main structure for storing (abstract) gate netlists
-        BDDFactory storage = JFactory.init(netlistNodesize, netlistNodesize / 4);
-        storage.setCacheRatio(4f);
         netlist = new Netlist(storage, stateGraph, reset);
 
         // Synthesis - generating a abstract gate netlist from the state graph
@@ -176,11 +174,6 @@ public class Flow {
         // Espresso optimiser - optimises a function table with Espresso
         optimiser = new EspressoOptimiser();
 
-        // Technology library import
-        TechLibrary techlib = TechLibrary.importFromFile(options.getTechnology(), storage);
-        if(techlib == null) {
-            return false;
-        }
         // Technology mapper - map abstract gates to actual gates of the library
         map = new TechnologyMapper(stateGraph, netlist, techlib, syn, options.isUnsafeanddeco());
         // Gate merger - combines mapped gates to larger ones if possible

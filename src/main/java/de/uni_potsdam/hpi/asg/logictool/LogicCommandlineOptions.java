@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2015 - 2016 Norman Kluge
+ * Copyright (C) 2015 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -29,12 +29,12 @@ import de.uni_potsdam.hpi.asg.common.iohelper.CommandlineOptions;
 public class LogicCommandlineOptions extends CommandlineOptions {
 
     public boolean parseCmdLine(String[] args) {
-        return super.parseCmdLine(args, "Usage: ASGlogic -lib <technologyfile> [options] <gfile>\nOptions:");
+        return super.parseCmdLine(args, "Usage: ASGlogic [options] <gfile>\nOptions:");
     }
 
     //@formatter:off
 
-    @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping", required = true)
+    @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping")
     private File technology;
     @Option(name = "-out", metaVar = "<file>", usage = "Synthesis outfile, default is logic.v")
     private File synthesisOutfile = new File(System.getProperty("user.dir") + File.separator + "logic.v");
