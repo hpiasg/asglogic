@@ -225,6 +225,15 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 										</extraArguments>
 									</jvmSettings>
 								</program>
+								<program>
+									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicGuiMain</mainClass>
+									<id>ASGlogic_gui</id>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/logic_gui_log4j2.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
+								</program>
 							</programs>
 							<repositoryLayout>flat</repositoryLayout>
 							<repositoryName>lib</repositoryName>
@@ -320,6 +329,15 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									<commandLineArguments>
 										<commandLineArgument>-cfg "%BASEDIR%"/config/logicconfig.xml</commandLineArgument>
 									</commandLineArguments>
+								</program>
+								<program>
+									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicGuiMain</mainClass>
+									<id>ASGlogic_gui</id>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/logic_gui_log4j2.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
 								</program>
 							</programs>
 							<repositoryLayout>flat</repositoryLayout>
