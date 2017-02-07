@@ -73,8 +73,8 @@ public class RunLogicFrame extends AbstractRunFrame {
         GridBagLayout gbl_generalpanel = new GridBagLayout();
         gbl_generalpanel.columnWidths = new int[]{150, 300, 30, 80, 0};
         gbl_generalpanel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_generalpanel.rowHeights = new int[]{15, 15, 15, 15, 15, 15, 15, 15, 15, 0};
-        gbl_generalpanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_generalpanel.rowHeights = new int[]{15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0};
+        gbl_generalpanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel.setLayout(gbl_generalpanel);
 
         panel.addTextEntry(0, TextParam.GFile, "G file", "", true, JFileChooser.FILES_ONLY, false);
