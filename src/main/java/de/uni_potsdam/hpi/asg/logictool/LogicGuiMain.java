@@ -25,9 +25,6 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.status.StatusLogger;
-
 import de.uni_potsdam.hpi.asg.common.gui.WatchForCloseWindowAdapter;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.technology.TechnologyDirectory;
@@ -42,10 +39,6 @@ public class LogicGuiMain {
     public static final String logicconfig   = "$BASEDIR/config/logicconfig.xml";
     public static final String logicbin_unix = "$BASEDIR/bin/ASGlogic";
     public static final String logicbin_win  = "$BASEDIR/bin/ASGlogic.bat";
-
-    static {
-        StatusLogger.getLogger().setLevel(Level.OFF);
-    }
 
     public static void main(String[] args) {
         int status = main2(args);
