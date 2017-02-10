@@ -34,6 +34,7 @@ public class LogicParameters extends AbstractParameters {
     public enum BooleanParam implements AbstractBooleanParam {
         /*general*/ TechLibDef,
         /*adv*/ cscN, cscP, cscM, archGC, archSC, rstOD, rstF,
+        /*debug*/ unsafeanddeco
     }
     
     public enum EnumParam implements AbstractEnumParam {

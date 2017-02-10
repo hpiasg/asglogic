@@ -123,6 +123,7 @@ public class RunLogicFrame extends AbstractRunFrame {
         panel.setLayout(gbl_advpanel);
 
         panel.addCheckboxEntry(0, GeneralBooleanParam.debug, "Debug", isDebug);
+        panel.addCheckboxEntry(1, BooleanParam.unsafeanddeco, "UnsafeAndDeco", false);
 
         getDataFromPanel(panel);
     }

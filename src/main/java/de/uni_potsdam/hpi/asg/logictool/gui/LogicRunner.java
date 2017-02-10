@@ -140,5 +140,8 @@ public class LogicRunner extends AbstractRunner {
         if(params.getBooleanValue(GeneralBooleanParam.debug)) {
             cmd.add("-debug");
         }
+        if(params.getBooleanValue(BooleanParam.unsafeanddeco)) {
+            cmd.add("-unsafeanddeco");
+        }
     }
 }
