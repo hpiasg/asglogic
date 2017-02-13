@@ -27,6 +27,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import de.uni_potsdam.hpi.asg.common.gui.WatchForCloseWindowAdapter;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
+import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.common.technology.TechnologyDirectory;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters;
 import de.uni_potsdam.hpi.asg.logictool.gui.RunLogicFrame;
@@ -35,10 +36,8 @@ import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
 
 public class LogicGuiMain {
 
-    public static final String techdir       = "$BASEDIR/tech";
-    public static final String logicconfig   = "$BASEDIR/config/logicconfig.xml";
-    public static final String logicbin_unix = "$BASEDIR/bin/ASGlogic";
-    public static final String logicbin_win  = "$BASEDIR/bin/ASGlogic.bat";
+    public static final File LOGIC_BIN_UNIX = new File(CommonConstants.DEF_BIN_DIR_FILE, "ASGlogic");
+    public static final File LOGIC_BIN_WIN  = new File(CommonConstants.DEF_BIN_DIR_FILE, "ASGlogic.bat");
 
     public static void main(String[] args) {
         int status = main2(args);
@@ -59,16 +58,15 @@ public class LogicGuiMain {
             return 1;
         }
 
-        File cfgFile = FileHelper.getInstance().replaceBasedir(logicconfig);
-        Config cfg = ConfigFile.readIn(cfgFile);
+        Config cfg = ConfigFile.readIn(LogicMain.CONFIG_FILE);
         String defTechName = null;
         if(cfg.defaultTech != null) {
             File defTechFile = FileHelper.getInstance().replaceBasedir(cfg.defaultTech);
             if(defTechFile != null && defTechFile.exists()) {
-                defTechName = defTechFile.getName().replace(TechnologyDirectory.genlibfileExtension, "");
+                defTechName = defTechFile.getName().replace(CommonConstants.GENLIB_FILE_EXTENSION, "");
             }
         }
-        TechnologyDirectory techDir = TechnologyDirectory.create(techdir, null);
+        TechnologyDirectory techDir = TechnologyDirectory.createDefault();
         if(techDir == null) {
             return 1;
         }

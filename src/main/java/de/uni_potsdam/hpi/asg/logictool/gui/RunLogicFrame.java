@@ -33,9 +33,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.gui.PropertiesPanel;
-import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractParameters;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractParameters.GeneralBooleanParam;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunFrame;
+import de.uni_potsdam.hpi.asg.logictool.LogicMain;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.BooleanParam;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.EnumParam;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.TextParam;
@@ -88,7 +88,7 @@ public class RunLogicFrame extends AbstractRunFrame {
         panel.addTechnologyChooserWithDefaultEntry(1, "Technology library", techs, defTech, EnumParam.TechLib, BooleanParam.TechLibDef, "Use default");
         addOutSection(panel, 2, "logic.v");
         // 4: blank
-        addIOSection(panel, 5, AbstractParameters.basedirStr + "/config/logicconfig.xml");
+        addIOSection(panel, 5, LogicMain.CONFIG_FILE_NAME);
 
         getDataFromPanel(panel);
     }

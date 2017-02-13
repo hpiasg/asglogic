@@ -28,6 +28,7 @@ import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
+import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
@@ -36,12 +37,16 @@ import net.sf.javabdd.BDDFactory;
 import net.sf.javabdd.JFactory;
 
 public class LogicMain {
+
+    public static final String             CONFIG_FILE_NAME = "logicconfig.xml";
+    public static final File               CONFIG_FILE      = new File(CommonConstants.DEF_CONFIG_DIR_FILE, CONFIG_FILE_NAME);
+
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
     public static Config                   config;
 
     // Magic number: Initial node size of the BDD factory for the Netlist data structure.
-    private static final int               netlistNodesize = 10000;
+    private static final int               netlistNodesize  = 10000;
 
     /**
      * Main entrance of program.

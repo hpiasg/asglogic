@@ -25,6 +25,7 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 
 import de.uni_potsdam.hpi.asg.common.iohelper.CommandlineOptions;
+import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 
 public class LogicCommandlineOptions extends CommandlineOptions {
 
@@ -36,23 +37,23 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping")
     private File technology;
-    @Option(name = "-out", metaVar = "<file>", usage = "Synthesis outfile, default is logic.v")
-    private File synthesisOutfile = new File(System.getProperty("user.dir") + File.separator + "logic.v");
+    @Option(name = "-out", metaVar = "<file>", usage = "Synthesis outfile, default is logic" + CommonConstants.VERILOG_FILE_EXTENSION)
+    private File synthesisOutfile = new File(System.getProperty("user.dir") + File.separator + "logic" + CommonConstants.VERILOG_FILE_EXTENSION);
 
     @Option(name = "-csc", metaVar = "<toolcode>", usage = "External tool to solve csc: M: mpsat, [N]: none, P: petrify")
     private String cscSolving = "N";
 
     @Option(name = "-o", metaVar = "<level>", usage = "Outputlevel: 0:nothing\n1:errors\n2:+warnings\n[3:+info]")
     private int outputlevel = 3;
-    @Option(name = "-log", metaVar = "<logfile>", usage = "Define output Logfile, default is logic.log")
-    private File logfile = new File(System.getProperty("user.dir") + File.separator + "logic.log");
+    @Option(name = "-log", metaVar = "<logfile>", usage = "Define output Logfile, default is logic" + CommonConstants.LOG_FILE_EXTENSION)
+    private File logfile = new File(System.getProperty("user.dir"), "logic" + CommonConstants.LOG_FILE_EXTENSION);
     @Option(name = "-debug")
     private boolean debug = false;
 
-    @Option(name = "-zip", metaVar = "<zipfile>", usage = "Zip outfile with all temporary files, default is logic.zip")
-    private File workfile = new File(System.getProperty("user.dir") + File.separator + "logic.zip");
-    @Option(name = "-cfg", metaVar = "<configfile>", usage = "Config file, default is logicconfig.xml")
-    private File configfile = new File("logicconfig.xml");
+    @Option(name = "-zip", metaVar = "<zipfile>", usage = "Zip outfile with all temporary files, default is logic" + CommonConstants.ZIP_FILE_EXTENSION)
+    private File workfile = new File(System.getProperty("user.dir"), "logic" + CommonConstants.ZIP_FILE_EXTENSION);
+    @Option(name = "-cfg", metaVar = "<configfile>", usage = "Config file, default is " + LogicMain.CONFIG_FILE_NAME)
+    private File configfile = LogicMain.CONFIG_FILE;
     @Option(name = "-w", metaVar = "<workingdir>", usage = "Working directory. If not given, the value in configfile is used. If there is no entry, 'logicwork*' in the os default tmp dir is used.")
     private File workingdir = null;
 

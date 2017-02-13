@@ -29,8 +29,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractParameters.GeneralBooleanParam;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunner;
-import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
-import de.uni_potsdam.hpi.asg.common.technology.TechnologyDirectory;
+import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.logictool.LogicGuiMain;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.BooleanParam;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.EnumParam;
@@ -73,18 +72,16 @@ public class LogicRunner extends AbstractRunner {
 
     private File getTechFile() {
         String techName = params.getEnumValue(EnumParam.TechLib);
-        String tech = LogicGuiMain.techdir + "/" + techName + TechnologyDirectory.genlibfileExtension;
-        File techfile = FileHelper.getInstance().replaceBasedir(tech);
-        return techfile;
+        return new File(CommonConstants.DEF_TECH_DIR_FILE, techName + CommonConstants.GENLIB_FILE_EXTENSION);
     }
 
     private List<String> buildCmd() {
         List<String> cmd = new ArrayList<>();
         File logicbin = null;
         if(SystemUtils.IS_OS_WINDOWS) {
-            logicbin = FileHelper.getInstance().replaceBasedir(LogicGuiMain.logicbin_win);
+            logicbin = LogicGuiMain.LOGIC_BIN_WIN;
         } else if(SystemUtils.IS_OS_UNIX) {
-            logicbin = FileHelper.getInstance().replaceBasedir(LogicGuiMain.logicbin_unix);
+            logicbin = LogicGuiMain.LOGIC_BIN_UNIX;
         }
         if(logicbin == null) {
             logger.error("Unsupported operating system");
