@@ -52,8 +52,8 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     @Option(name = "-zip", metaVar = "<zipfile>", usage = "Zip outfile with all temporary files, default is logic" + CommonConstants.ZIP_FILE_EXTENSION)
     private File workfile = new File(System.getProperty("user.dir"), "logic" + CommonConstants.ZIP_FILE_EXTENSION);
-    @Option(name = "-cfg", metaVar = "<configfile>", usage = "Config file, default is " + LogicMain.CONFIG_FILE_NAME)
-    private File configfile = LogicMain.CONFIG_FILE;
+    @Option(name = "-cfg", metaVar = "<configfile>", usage = "Config file, default is " + LogicMain.DEF_CONFIG_FILE_NAME)
+    private File configfile = LogicMain.DEF_CONFIG_FILE;
     @Option(name = "-w", metaVar = "<workingdir>", usage = "Working directory. If not given, the value in configfile is used. If there is no entry, 'logicwork*' in the os default tmp dir is used.")
     private File workingdir = null;
 

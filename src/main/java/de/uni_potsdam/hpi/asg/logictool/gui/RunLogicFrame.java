@@ -88,7 +88,7 @@ public class RunLogicFrame extends AbstractRunFrame {
         panel.addTechnologyChooserWithDefaultEntry(1, "Technology library", techs, defTech, EnumParam.TechLib, BooleanParam.TechLibDef, "Use default");
         addOutSection(panel, 2, "logic.v");
         // 4: blank
-        addIOSection(panel, 5, LogicMain.CONFIG_FILE_NAME);
+        addIOSection(panel, 5, LogicMain.DEF_CONFIG_FILE_NAME);
 
         getDataFromPanel(panel);
     }

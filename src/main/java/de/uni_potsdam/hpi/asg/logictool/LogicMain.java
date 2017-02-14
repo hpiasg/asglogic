@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.Logger;
 
-import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.BasedirHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
@@ -38,8 +38,8 @@ import net.sf.javabdd.JFactory;
 
 public class LogicMain {
 
-    public static final String             CONFIG_FILE_NAME = "logicconfig.xml";
-    public static final File               CONFIG_FILE      = new File(CommonConstants.DEF_CONFIG_DIR_FILE, CONFIG_FILE_NAME);
+    public static final String             DEF_CONFIG_FILE_NAME = "logicconfig.xml";
+    public static final File               DEF_CONFIG_FILE      = new File(CommonConstants.DEF_CONFIG_DIR_FILE, DEF_CONFIG_FILE_NAME);
 
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
@@ -137,7 +137,7 @@ public class LogicMain {
         }
 
         if(cfgTech != null) {
-            File cfgTechFile = FileHelper.getInstance().replaceBasedir(cfgTech);
+            File cfgTechFile = BasedirHelper.replaceBasedirAsFile(cfgTech);
             if(cfgTechFile.exists()) {
                 logger.debug("Using config technology file: " + cfgTechFile.getAbsolutePath());
                 return TechLibrary.importFromFile(cfgTechFile, storage);
