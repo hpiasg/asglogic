@@ -54,7 +54,7 @@ public class LogicParameters extends AbstractParameters {
 
     @Override
     public String getEnumValue(AbstractEnumParam param) {
-        int index = frame.getEnumValue(param);
+        int index = mainpanel.getEnumValue(param);
         if(param == EnumParam.TechLib) {
             return techs[index];
         } else {

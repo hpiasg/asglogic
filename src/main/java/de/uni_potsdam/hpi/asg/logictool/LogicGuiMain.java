@@ -32,7 +32,7 @@ import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper.Mode;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.common.technology.TechnologyDirectory;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters;
-import de.uni_potsdam.hpi.asg.logictool.gui.RunLogicFrame;
+import de.uni_potsdam.hpi.asg.logictool.gui.RunLogicPanel;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
 
@@ -76,16 +76,18 @@ public class LogicGuiMain {
         }
         LogicParameters params = new LogicParameters(defTechName, techDir);
 
-        WatchForCloseWindowAdapter adapt = new WatchForCloseWindowAdapter();
-        RunLogicFrame rframe = new RunLogicFrame(params, adapt, isDebug);
-        if(rframe.hasErrorOccured()) {
+        JFrame runframe = new JFrame("ASGlogic runner");
+        RunLogicPanel runpanel = new RunLogicPanel(runframe, params, isDebug);
+        if(runpanel.hasErrorOccured()) {
             return 1;
         }
-
-        rframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        rframe.pack();
-        rframe.setLocationRelativeTo(null); //center
-        rframe.setVisible(true);
+        runframe.getContentPane().add(runpanel);
+        WatchForCloseWindowAdapter adapt = new WatchForCloseWindowAdapter();
+        runframe.addWindowListener(adapt);
+        runframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        runframe.pack();
+        runframe.setLocationRelativeTo(null); //center
+        runframe.setVisible(true);
 
         while(!adapt.isClosed()) {
             try {
