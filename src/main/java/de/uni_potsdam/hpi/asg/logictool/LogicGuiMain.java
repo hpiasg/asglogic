@@ -27,6 +27,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import de.uni_potsdam.hpi.asg.common.gui.WatchForCloseWindowAdapter;
 import de.uni_potsdam.hpi.asg.common.iohelper.BasedirHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper.Mode;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.common.technology.TechnologyDirectory;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters;
@@ -51,6 +53,8 @@ public class LogicGuiMain {
                 isDebug = true;
             }
         }
+
+        LoggerHelper.initLogger(3, null, false, Mode.gui);
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

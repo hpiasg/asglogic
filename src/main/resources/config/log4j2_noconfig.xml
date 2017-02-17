@@ -18,14 +18,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 -->
-	
-<Configuration status="WARN" packages="de.uni_potsdam.hpi.asg.common.gui">
-	<Appenders>
-		<DialogAppender name="DiaApp" />
-	</Appenders>
+
+<Configuration>
 	<Loggers>
-		<Root level="ALL">
-			<AppenderRef ref="DiaApp" />
-		</Root>
+		<Root level="off" />
 	</Loggers>
 </Configuration>

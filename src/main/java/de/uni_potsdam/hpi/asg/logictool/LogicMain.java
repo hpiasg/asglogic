@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.iohelper.BasedirHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper.Mode;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
@@ -46,7 +47,7 @@ public class LogicMain {
     public static Config                   config;
 
     // Magic number: Initial node size of the BDD factory for the Netlist data structure.
-    private static final int               netlistNodesize  = 10000;
+    private static final int               netlistNodesize      = 10000;
 
     /**
      * Main entrance of program.
@@ -86,7 +87,7 @@ public class LogicMain {
         int status = -1;
         options = new LogicCommandlineOptions();
         if(options.parseCmdLine(args)) {
-            logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug());
+            logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug(), Mode.cmdline);
             logger.debug("Args: " + Arrays.asList(args).toString());
             config = ConfigFile.readIn(options.getConfigfile());
             if(config == null) {
