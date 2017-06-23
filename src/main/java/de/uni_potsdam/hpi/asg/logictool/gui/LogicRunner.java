@@ -19,6 +19,8 @@ package de.uni_potsdam.hpi.asg.logictool.gui;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.awt.Window;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +47,16 @@ public class LogicRunner extends AbstractRunner {
         this.params = params;
     }
 
-    public void run() {
+    public void run(TerminalMode mode) {
+        run(mode, null);
+    }
+
+    public void run(TerminalMode mode, Window parent) {
         if(!checkParams()) {
             return;
         }
         List<String> cmd = buildCmd();
-        exec(cmd, "ASGlogic terminal");
+        exec(cmd, "ASGlogic terminal", mode, null, parent);
     }
 
     private boolean checkParams() {

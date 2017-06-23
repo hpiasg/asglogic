@@ -34,6 +34,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.gui.PropertiesPanel;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractParameters.GeneralBooleanParam;
+import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunner.TerminalMode;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunPanel;
 import de.uni_potsdam.hpi.asg.logictool.LogicMain;
 import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.BooleanParam;
@@ -64,7 +65,7 @@ public class RunLogicPanel extends AbstractRunPanel {
         runBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 LogicRunner run = new LogicRunner(params);
-                run.run();
+                run.run(TerminalMode.frame);
             }
         });
         this.add(runBtn, BorderLayout.PAGE_END);
