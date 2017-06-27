@@ -1,4 +1,4 @@
-package de.uni_potsdam.hpi.asg.logictool.gui;
+package de.uni_potsdam.hpi.asg.logictool.runner;
 
 /*
  * Copyright (C) 2017 Norman Kluge
@@ -32,10 +32,10 @@ import org.apache.logging.log4j.Logger;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractParameters.GeneralBooleanParam;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunner;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
-import de.uni_potsdam.hpi.asg.logictool.LogicGuiMain;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.BooleanParam;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.EnumParam;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.TextParam;
+import de.uni_potsdam.hpi.asg.logictool.LogicRunMain;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters.BooleanParam;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters.EnumParam;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters.TextParam;
 
 public class LogicRunner extends AbstractRunner {
     private static final Logger logger = LogManager.getLogger();
@@ -85,9 +85,9 @@ public class LogicRunner extends AbstractRunner {
         List<String> cmd = new ArrayList<>();
         File logicbin = null;
         if(SystemUtils.IS_OS_WINDOWS) {
-            logicbin = LogicGuiMain.LOGIC_BIN_WIN;
+            logicbin = LogicRunMain.LOGIC_BIN_WIN;
         } else if(SystemUtils.IS_OS_UNIX) {
-            logicbin = LogicGuiMain.LOGIC_BIN_UNIX;
+            logicbin = LogicRunMain.LOGIC_BIN_UNIX;
         }
         if(logicbin == null) {
             logger.error("Unsupported operating system");

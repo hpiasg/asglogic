@@ -226,8 +226,8 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									</jvmSettings>
 								</program>
 								<program>
-									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicGuiMain</mainClass>
-									<id>ASGlogic_gui</id>
+									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicRunMain</mainClass>
+									<id>ASGlogic_run</id>
 									<jvmSettings>
 										<extraArguments>
 											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
@@ -333,8 +333,8 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									</jvmSettings>
 								</program>
 								<program>
-									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicGuiMain</mainClass>
-									<id>ASGlogic_gui</id>
+									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicRunMain</mainClass>
+									<id>ASGlogic_run</id>
 									<jvmSettings>
 										<extraArguments>
 											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>

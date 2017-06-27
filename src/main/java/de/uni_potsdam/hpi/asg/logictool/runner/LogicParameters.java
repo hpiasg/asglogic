@@ -1,4 +1,4 @@
-package de.uni_potsdam.hpi.asg.logictool.gui;
+package de.uni_potsdam.hpi.asg.logictool.runner;
 
 /*
  * Copyright (C) 2017 Norman Kluge

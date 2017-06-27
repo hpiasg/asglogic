@@ -1,4 +1,4 @@
-package de.uni_potsdam.hpi.asg.logictool.gui;
+package de.uni_potsdam.hpi.asg.logictool.runner;
 
 /*
  * Copyright (C) 2017 Norman Kluge
@@ -37,9 +37,9 @@ import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractParameters.GeneralBoolea
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunner.TerminalMode;
 import de.uni_potsdam.hpi.asg.common.gui.runner.AbstractRunPanel;
 import de.uni_potsdam.hpi.asg.logictool.LogicMain;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.BooleanParam;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.EnumParam;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters.TextParam;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters.BooleanParam;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters.EnumParam;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters.TextParam;
 
 public class RunLogicPanel extends AbstractRunPanel {
     private static final long   serialVersionUID = 2663337555026127634L;

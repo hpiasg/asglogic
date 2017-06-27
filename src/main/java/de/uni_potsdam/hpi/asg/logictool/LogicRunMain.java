@@ -31,12 +31,12 @@ import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper.Mode;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.common.technology.TechnologyDirectory;
-import de.uni_potsdam.hpi.asg.logictool.gui.LogicParameters;
-import de.uni_potsdam.hpi.asg.logictool.gui.RunLogicPanel;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
+import de.uni_potsdam.hpi.asg.logictool.runner.LogicParameters;
+import de.uni_potsdam.hpi.asg.logictool.runner.RunLogicPanel;
 
-public class LogicGuiMain {
+public class LogicRunMain {
 
     public static final File LOGIC_BIN_UNIX = new File(CommonConstants.DEF_BIN_DIR_FILE, "ASGlogic");
     public static final File LOGIC_BIN_WIN  = new File(CommonConstants.DEF_BIN_DIR_FILE, "ASGlogic.bat");
