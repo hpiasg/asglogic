@@ -35,7 +35,7 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     //@formatter:off
 
-    @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping")
+    @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping (GenLib format)")
     private File technology;
     @Option(name = "-out", metaVar = "<file>", usage = "Synthesis outfile, default is logic" + CommonConstants.VERILOG_FILE_EXTENSION)
     private File synthesisOutfile = new File(System.getProperty("user.dir") + File.separator + "logic" + CommonConstants.VERILOG_FILE_EXTENSION);
