@@ -56,11 +56,11 @@ public class AndDecoSGHelper {
             str.append(sig.getName());
         }
 
-        String workingdir = WorkingdirGenerator.getInstance().getWorkingdir();
+        File workingDir = WorkingdirGenerator.getInstance().getWorkingDir();
         String basename = stgfile.getName() + "_" + str.toString();
         String newfilename = basename + ".g";
         FileHelper.getInstance().copyfile(stgfile, newfilename);
-        STG stg = GFile.importFromFile(new File(workingdir + newfilename));
+        STG stg = GFile.importFromFile(new File(workingDir, newfilename));
 
         Set<String> signames = new HashSet<>();
         for(Signal sig : signals) {
@@ -79,16 +79,16 @@ public class AndDecoSGHelper {
         }
         basename = basename.substring(0, Math.min(basename.length(), 10));
 
-        String newfilename_d = basename + "_d.g";
-        String newfilename_dk = basename + "_dk.g";
-        String newfilename_dkc = basename + "_dkc.g";
-        String newfilename_dkc_log = basename + "_dkc.log";
+        File newfile_d = new File(workingDir, basename + "_d.g");
+        File newfile_dk = new File(workingDir, basename + "_dk.g");
+        File newfile_dkc = new File(workingDir, basename + "_dkc.g");
+        File newfile_dkc_log = new File(workingDir, basename + "_dkc.log");
 
-        GFile.writeGFile(stg, new File(workingdir + newfilename_d));
-        LogicInvoker.getInstance().invokeDesijKilldummies(workingdir + newfilename_dk, workingdir + newfilename_d);
-        LogicInvoker.getInstance().invokePetrifyCSC(newfilename_dk, newfilename_dkc_log, newfilename_dkc);
+        GFile.writeGFile(stg, newfile_d);
+        LogicInvoker.getInstance().invokeDesijKilldummies(newfile_dk, newfile_d);
+        LogicInvoker.getInstance().invokePetrifyCSC(newfile_dk, newfile_dkc_log, newfile_dkc);
 
-        STG stg2 = GFile.importFromFile(new File(workingdir + newfilename_dkc));
+        STG stg2 = GFile.importFromFile(newfile_dkc);
         LoggerHelper.setLogLevel(LogManager.getLogger(StateGraphComputer.class), Level.OFF);
         StateGraphComputer comp = new StateGraphComputer(stg2, new TreeSet<Signal>(stg2.getSignals()), null);
         LoggerHelper.setLogLevel(LogManager.getLogger(StateGraphComputer.class), Level.ALL);

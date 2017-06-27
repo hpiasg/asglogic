@@ -71,8 +71,8 @@ public class LogicInvoker extends Invoker {
         }
     }
 
-    public boolean invokeDesijKilldummies(String outfile, String infile) {
-        String[] params = {"-Y", "-t", "operation=killdummiesrelaxed", "outfile=" + outfile, infile}; //"-t"
+    public boolean invokeDesijKilldummies(File outfile, File infile) {
+        String[] params = {"-Y", "-t", "operation=killdummiesrelaxed", "outfile=" + outfile.getAbsolutePath(), infile.getAbsolutePath()}; //"-t"
         return invokeDesij(Arrays.asList(params));
     }
 
@@ -86,19 +86,19 @@ public class LogicInvoker extends Invoker {
         return errorHandling(ret);
     }
 
-    public boolean invokePetrifyCSC(String infile, String logfile, String outfile) {
+    public boolean invokePetrifyCSC(File infile, File logfile, File outfile) {
         String[] command = convertCmd(LogicMain.config.toolconfig.petrifycmd);
         if(command == null) {
             logger.error("Could not read petrify cmd String");
             return false;
         }
-        String[] params = {"-csc", "-dead", "-o", outfile, "-log", logfile, infile};
+        String[] params = {"-csc", "-dead", "-o", outfile.getAbsolutePath(), "-log", logfile.getAbsolutePath(), infile.getAbsolutePath()};
         ProcessReturn ret = invoke(command, params);
         return errorHandling(ret);
     }
 
-    public boolean invokePUNFandMPSAT(String infile, String outfile) {
-        String mcifile = infile.replace(".g", "") + ".mci";
+    public boolean invokePUNFandMPSAT(File infile, File outfile) {
+        String mcifile = infile.getAbsolutePath().replace(".g", "") + ".mci";
 
         String[] cmd = convertCmd(LogicMain.config.toolconfig.punfcmd);
         if(cmd == null) {
@@ -108,7 +108,7 @@ public class LogicInvoker extends Invoker {
         String[] params = {"-m=" + mcifile, "-f=" + infile};
         ProcessReturn ret = invoke(cmd, params);
 
-        File mci = new File(workingdir, mcifile);
+        File mci = new File(workingDir, mcifile);
 //		logger.debug("punf: " + ret.getCode());
         if(!mci.exists()) { // punf returns != 0 even if there are only warnings
             if(!errorHandling(ret)) {
@@ -117,7 +117,7 @@ public class LogicInvoker extends Invoker {
             }
         }
 
-        File tmpfolder = new File(workingdir + infile + ".tmp");
+        File tmpfolder = new File(workingDir, infile.getName() + "_tmp");
         if(!tmpfolder.mkdir()) {
             logger.error("Could not create tmp folder for mpsat: " + tmpfolder.getName());
             return false;
@@ -128,7 +128,7 @@ public class LogicInvoker extends Invoker {
             logger.error("Could not read mpsat cmd string");
             return false;
         }
-        String[] params2 = {"-R", "-f", "-@", "-p0", "-cl", "../" + mcifile};
+        String[] params2 = {"-R", "-f", "-@", "-p0", "-cl", mcifile};
         ProcessReturn ret2 = invoke(cmd2, params2, tmpfolder);
         if(!errorHandling(ret2)) {
             logger.error("MPSAT Error with " + mcifile);

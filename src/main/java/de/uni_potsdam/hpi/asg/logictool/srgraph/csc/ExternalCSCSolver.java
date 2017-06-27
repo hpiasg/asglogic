@@ -19,10 +19,13 @@ package de.uni_potsdam.hpi.asg.logictool.srgraph.csc;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
+import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.stg.model.STG;
 import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
 
@@ -40,8 +43,9 @@ public class ExternalCSCSolver implements CSCSolver {
     }
 
     @Override
-    public boolean solveCSC(STG stgin, String stgoutfile) {
-        String stginfile = stgin.getFile().getName().replace(".g", "") + "_orig.g";
+    public boolean solveCSC(STG stgin, File stgoutfile) {
+        File workingDir = WorkingdirGenerator.getInstance().getWorkingDir();
+        File stginfile = new File(workingDir, stgin.getFile().getName().replace(".g", "") + "_orig.g");
         FileHelper.getInstance().copyfile(stgin.getFile(), stginfile);
         switch(config) {
             case mpsat:
@@ -53,12 +57,14 @@ public class ExternalCSCSolver implements CSCSolver {
         }
     }
 
-    private boolean solveCSCpetrify(String stginfile, String stgoutfile) {
+    private boolean solveCSCpetrify(File stginfile, File stgoutfile) {
         logger.info("Solving CSC with petrify");
-        return LogicInvoker.getInstance().invokePetrifyCSC(stginfile, stgoutfile.replace(".g", "") + ".log", stgoutfile);
+        File workingDir = WorkingdirGenerator.getInstance().getWorkingDir();
+        String logFileName = stgoutfile.getName().replace(".g", "") + ".log";
+        return LogicInvoker.getInstance().invokePetrifyCSC(stginfile, new File(workingDir, logFileName), stgoutfile);
     }
 
-    private boolean solveCSCmspat(String stginfile, String stgoutfile) {
+    private boolean solveCSCmspat(File stginfile, File stgoutfile) {
         logger.info("Solving CSC with mpsat");
         return LogicInvoker.getInstance().invokePUNFandMPSAT(stginfile, stgoutfile);
     }

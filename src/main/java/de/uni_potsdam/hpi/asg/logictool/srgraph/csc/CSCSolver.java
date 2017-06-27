@@ -19,10 +19,12 @@ package de.uni_potsdam.hpi.asg.logictool.srgraph.csc;
  * along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.io.File;
+
 import de.uni_potsdam.hpi.asg.common.stg.model.STG;
 
 public interface CSCSolver {
 
-    public boolean solveCSC(STG stgin, String stgoutfile);
+    public boolean solveCSC(STG stgin, File stgoutfile);
 
 }

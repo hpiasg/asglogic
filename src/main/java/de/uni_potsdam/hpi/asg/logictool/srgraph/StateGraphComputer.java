@@ -86,8 +86,9 @@ public class StateGraphComputer extends AbstractSTGGraphComputer<State> {
         if(!checkCSC(states2)) {
             if(cscsolver != null) {
                 String newfilename = stg.getFile().getName() + "_csc.g";
-                if(cscsolver.solveCSC(stg, newfilename)) {
-                    STG newSTG = GFile.importFromFile(new File(WorkingdirGenerator.getInstance().getWorkingdir(), newfilename));
+                File newFile = new File(WorkingdirGenerator.getInstance().getWorkingDir(), newfilename);
+                if(cscsolver.solveCSC(stg, newFile)) {
+                    STG newSTG = GFile.importFromFile(new File(WorkingdirGenerator.getInstance().getWorkingDir(), newfilename));
                     StateGraphComputer newcomp = new StateGraphComputer(newSTG, new TreeSet<Signal>(newSTG.getSignals()), null);
                     return newcomp.compute();
                 } else {
