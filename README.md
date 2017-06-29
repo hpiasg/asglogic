@@ -37,7 +37,7 @@ To see a list of supported command line arguments execute
 
 To synthesise a circuit with default values execute
 
-    bin/ASGlogic -lib tech/tech.lib stg.g
+    bin/ASGlogic -lib tech/tech_gen.lib stg.g
 
 The `-lib` option expects a technology library file in the [Genlib format](https://www.ece.cmu.edu/~ee760/760docs/genlib.pdf) (which is also used by [Petrify](http://www.lsi.upc.edu/~jordicf/petrify/)).
 
