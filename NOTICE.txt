@@ -1,4 +1,4 @@
-ASGlogic
+ASGlogic v0.2
 Copyright (C) 2014-2017 Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH
 
 This product includes software developed at Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH.
@@ -8,7 +8,7 @@ This software makes use of the following libraries:
 
 Apache Commons IO v2.5
 https://commons.apache.org/proper/commons-io/
-Copyright 2002-2016 The Apache Software Foundatio
+Copyright 2002-2016 The Apache Software Foundation
 Licensed under Apache License, Version 2.0
 
 Apache log4j(TM) v2.1
@@ -53,11 +53,15 @@ Licensed under the Lesser GNU Public License
 
 This software makes use of the following external software:
 
-DesiJ: A Tool for STG Decomposition
+DesiJ: A Tool for STG Decomposition v3.1.1
 https://github.com/hpiasg/desij
 Copyright (C) 2004-2014 Universitaet Augsburg, Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH
 Licensed under GNU General Public License (GPL), Version 3.0
 Notice: bin/DesiJ_NOTICE.txt
+
+Espresso: a two-level (PLA) logic minimizer
+Copyright (c) 1988, 1989, Regents of the University of California
+License: tools/espresso/LICENSE.ESPRESSO.txt
 
 MPSAT model checking/synthesis system
 http://homepages.cs.ncl.ac.uk/victor.khomenko/tools/mpsat/
@@ -73,7 +77,3 @@ Petrify: a tool for synthesis of Petri Nets and asynchronous circuits
 http://www.lsi.upc.edu/~jordicf/petrify/
 Copyright (C) 1999 The Universitat Politecnica de Catalunya
 License: tools/petrify/LICSENSE.PETRIFY.txt
-
-Espresso: a two-level (PLA) logic minimizer
-Copyright (c) 1988, 1989, Regents of the University of California
-License: tools/espresso/LICENSE.ESPRESSO.txt
