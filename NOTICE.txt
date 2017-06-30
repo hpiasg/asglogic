@@ -59,21 +59,21 @@ Copyright (C) 2004-2014 Universitaet Augsburg, Hasso-Plattner-Institut fuer Soft
 Licensed under GNU General Public License (GPL), Version 3.0
 Notice: bin/DesiJ_NOTICE.txt
 
-Espresso: a two-level (PLA) logic minimizer
+Espresso: a two-level (PLA) logic minimizer v2.3
 Copyright (c) 1988, 1989, Regents of the University of California
 License: tools/espresso/LICENSE.ESPRESSO.txt
 
-MPSAT model checking/synthesis system
+MPSAT model checking/synthesis system v4.41beta
 http://homepages.cs.ncl.ac.uk/victor.khomenko/tools/mpsat/
 Copyright (C) 2000-2012 by Victor Khomenko
 License: tools/mpsat/LICENSE.MPSAT
-
-PUNF Petri net unfolder
-http://homepages.cs.ncl.ac.uk/victor.khomenko/tools/punf/
-Copyright (C) 2000-2012 by Victor Khomenko
-License: tools/punf/LICENSE.PUNF
 
 Petrify: a tool for synthesis of Petri Nets and asynchronous circuits
 http://www.lsi.upc.edu/~jordicf/petrify/
 Copyright (C) 1999 The Universitat Politecnica de Catalunya
 License: tools/petrify/LICSENSE.PETRIFY.txt
+
+PUNF Petri net unfolder v8.51
+http://homepages.cs.ncl.ac.uk/victor.khomenko/tools/punf/
+Copyright (C) 2000-2012 by Victor Khomenko
+License: tools/punf/LICENSE.PUNF
