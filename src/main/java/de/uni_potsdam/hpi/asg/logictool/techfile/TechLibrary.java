@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.techfile;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -125,6 +125,10 @@ public class TechLibrary {
             }
         }
 
+        if(gates.isEmpty()) {
+            logger.error("No gates in file " + file.getAbsolutePath() + " found. Is it a Genlib file?");
+            return null;
+        }
         return new TechLibrary(varmap.inverse(), gates);
     }
 

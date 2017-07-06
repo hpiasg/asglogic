@@ -34,6 +34,8 @@ public class Config {
     public ToolConfig toolconfig;
     @XmlElement(name = "workdir", required = false)
     public String  workdir;
+    @XmlElement(name = "defaulttech", required = false)
+    public String defaultTech;
     
     //@formatter:on
 }

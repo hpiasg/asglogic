@@ -23,7 +23,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uni_potsdam.hpi.asg</groupId>
 	<artifactId>asglogic</artifactId>
-	<version>0.1.5</version>
+	<version>0.2.0</version>
 	<organization>
 		<name>Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH</name>
 		<url>http://www.hpi.uni-potsdam.de</url>
@@ -42,10 +42,13 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<url>http://www.gnu.org/licenses/gpl.txt</url>
 		</license>
 	</licenses>
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<desij.version>3.1.1</desij.version>
-		<common.version>2.0.1</common.version>
+		<desij.version>3.1.2</desij.version>
+		<common.version>3.0.0</common.version>
 	</properties>
 	<build>
 		<resources>
@@ -108,7 +111,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									<pluginExecutionFilter>
 										<groupId>org.apache.maven.plugins</groupId>
 										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>2.9</versionRange>
+										<versionRange>3.0.1</versionRange>
 										<goals>
 											<goal>unpack</goal>
 										</goals>
@@ -145,7 +148,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.6.1</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -154,7 +157,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18</version>
+				<version>2.20</version>
 				<configuration>
 					<workingDirectory>${project.build.directory}/test-runs</workingDirectory>
 					<argLine>-Xmx1500m</argLine>
@@ -199,7 +202,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>appassembler-maven-plugin</artifactId>
-						<version>1.8.1</version>
+						<version>2.0.0</version>
 						<executions>
 							<execution>
 								<phase>prepare-package</phase>
@@ -219,6 +222,20 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									<commandLineArguments>
 										<commandLineArgument>-cfg "$BASEDIR"/config/logicconfig.xml</commandLineArgument>
 									</commandLineArguments>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
+								</program>
+								<program>
+									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicRunMain</mainClass>
+									<id>ASGlogic_run</id>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
 								</program>
 							</programs>
 							<repositoryLayout>flat</repositoryLayout>
@@ -229,7 +246,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.5.3</version>
+						<version>3.0.0</version>
 						<configuration>
 							<descriptors>
 								<descriptor>src/assembly/unix_assembly.xml</descriptor>
@@ -248,7 +265,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>3.0.1</version>
 						<executions>
 							<execution>
 								<phase>generate-resources</phase>
@@ -295,7 +312,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>appassembler-maven-plugin</artifactId>
-						<version>1.8.1</version>
+						<version>2.0.0</version>
 						<executions>
 							<execution>
 								<phase>package</phase>
@@ -312,9 +329,20 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 								<program>
 									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicMain</mainClass>
 									<id>ASGlogic</id>
-									<commandLineArguments>
-										<commandLineArgument>-cfg "%BASEDIR%"/config/logicconfig.xml</commandLineArgument>
-									</commandLineArguments>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
+								</program>
+								<program>
+									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicRunMain</mainClass>
+									<id>ASGlogic_run</id>
+									<jvmSettings>
+										<extraArguments>
+											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
+										</extraArguments>
+									</jvmSettings>
 								</program>
 							</programs>
 							<repositoryLayout>flat</repositoryLayout>
@@ -325,7 +353,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.5.3</version>
+						<version>3.0.0</version>
 						<configuration>
 							<descriptors>
 								<descriptor>src/assembly/windows_assembly.xml</descriptor>
@@ -344,7 +372,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>3.0.1</version>
 						<executions>
 							<execution>
 								<phase>generate-resources</phase>
@@ -384,7 +412,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>18.0</version>
+			<version>20.0</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uni_potsdam.hpi.asg</groupId>
@@ -399,7 +427,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -420,22 +448,22 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
-			<version>2.3</version>
+			<version>2.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
+			<version>3.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.monkeysintown</groupId>
 			<artifactId>jgraphx</artifactId>
-			<version>3.1.2.1</version>
+			<version>3.3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>args4j</groupId>
 			<artifactId>args4j</artifactId>
-			<version>2.0.29</version>
+			<version>2.33</version>
 		</dependency>
 	</dependencies>
 </project>
