@@ -47,7 +47,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 	</prerequisites>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<desij.version>3.1.1-SNAPSHOT</desij.version>
+		<desij.version>3.1.2-SNAPSHOT</desij.version>
 		<common.version>3.0.0-SNAPSHOT</common.version>
 	</properties>
 	<build>
