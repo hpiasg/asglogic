@@ -430,7 +430,7 @@ public class CElementSynthesis extends Synthesis {
      * 
      * @param var
      * @param vars
-     * @return size of driver network; -1 if error happend; -2 if network was
+     * @return size of driver network; -1 if error happened; -2 if network was
      *         partly not mapped
      */
     private float getSizeOfDriverNetwork(NetlistVariable var, Set<NetlistTerm> terms) {
