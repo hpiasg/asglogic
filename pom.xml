@@ -49,6 +49,8 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<desij.version>3.1.2</desij.version>
 		<common.version>4.0.0-SNAPSHOT</common.version>
+		<wrapper-async.version>1.0.0-SNAPSHOT</wrapper-async.version>
+		<wrapper-asg.version>1.0.0-SNAPSHOT</wrapper-asg.version>
 	</properties>
 	<build>
 		<resources>
@@ -182,6 +184,11 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 								<exec executable="cmd" osfamily="windows">
 									<arg line="/c move ${project.build.directory}/desij-${desij.version} ${project.build.directory}/desij" />
 								</exec>
+								<!-- Wrapper-async -->
+								<exec executable="mv">
+									<arg
+										line="${project.build.directory}/asgwrapper-asynctools-${wrapper-async.version} ${project.build.directory}/asgwrapper-asynctools" />
+								</exec>
 							</target>
 						</configuration>
 					</execution>
@@ -278,6 +285,14 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 											<groupId>net.strongdesign</groupId>
 											<artifactId>desij</artifactId>
 											<version>${desij.version}</version>
+											<classifier>unix</classifier>
+											<type>tar.gz</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asynctools</artifactId>
+											<version>${wrapper-async.version}</version>
 											<classifier>unix</classifier>
 											<type>tar.gz</type>
 											<outputDirectory>${project.build.directory}</outputDirectory>
@@ -389,6 +404,14 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 											<type>zip</type>
 											<outputDirectory>${project.build.directory}</outputDirectory>
 										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asynctools</artifactId>
+											<version>${wrapper-async.version}</version>
+											<classifier>win</classifier>
+											<type>zip</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
 									</artifactItems>
 								</configuration>
 							</execution>
@@ -464,6 +487,16 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<groupId>args4j</groupId>
 			<artifactId>args4j</artifactId>
 			<version>2.33</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uni_potsdam.hpi.asg</groupId>
+			<artifactId>asgwrapper-asynctools</artifactId>
+			<version>${wrapper-async.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uni_potsdam.hpi.asg</groupId>
+			<artifactId>asgwrapper-asgtools</artifactId>
+			<version>${wrapper-asg.version}</version>
 		</dependency>
 	</dependencies>
 </project>

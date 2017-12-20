@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.synthesis;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -21,8 +21,9 @@ package de.uni_potsdam.hpi.asg.logictool.synthesis;
 
 import java.io.File;
 
+import de.uni_potsdam.hpi.asg.common.invoker.InvokeReturn;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
-import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
+import de.uni_potsdam.hpi.asg.logictool.io.invoker.EspressoInvoker;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable.TableType;
 
@@ -33,7 +34,12 @@ public class EspressoOptimiser {
         File out = FileHelper.getInstance().newTmpFile("espresso_out.txt");
         table.setType(TableType.fr);
         table.exportToFile(in);
-        LogicInvoker.getInstance().invokeEspresso(in.getAbsolutePath(), out.getAbsolutePath());
+
+        InvokeReturn ret = EspressoInvoker.optimise(in, out);
+        if(ret == null || !ret.getResult()) {
+            return null;
+        }
+
         return EspressoTable.importFromFile(out);
     }
 }

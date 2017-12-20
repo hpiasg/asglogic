@@ -24,6 +24,8 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.common.invoker.ExternalToolsInvoker;
+import de.uni_potsdam.hpi.asg.common.invoker.local.ShutdownThread;
 import de.uni_potsdam.hpi.asg.common.iohelper.BasedirHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper.Mode;
@@ -32,7 +34,6 @@ import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
-import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
 import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
 import net.sf.javabdd.BDDFactory;
 import net.sf.javabdd.JFactory;
@@ -45,6 +46,7 @@ public class LogicMain {
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
     public static Config                   config;
+    public static boolean                  tooldebug;
 
     // Magic number: Initial node size of the BDD factory for the Netlist data structure.
     private static final int               netlistNodesize      = 10000;
@@ -89,15 +91,27 @@ public class LogicMain {
         if(options.parseCmdLine(args)) {
             logger = LoggerHelper.initLogger(options.getOutputlevel(), options.getLogfile(), options.isDebug(), Mode.cmdline);
             logger.debug("Args: " + Arrays.asList(args).toString());
+            logger.debug("Using config file " + options.getConfigfile());
             config = ConfigFile.readIn(options.getConfigfile());
             if(config == null) {
                 logger.error("Could not read config");
                 return 1;
             }
-            WorkingdirGenerator.getInstance().create(options.getWorkingdir(), config.workdir, "logicwork", LogicInvoker.getInstance());
+            Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+            WorkingdirGenerator.getInstance().create(options.getWorkingdir(), config.workdir, "resynwork");
+            tooldebug = options.isTooldebug();
+            logger.debug("Using tool config file " + options.getToolConfigFile());
+            if(!ExternalToolsInvoker.init(options.getToolConfigFile(), tooldebug)) {
+                return 1;
+            }
+//            if(!AbstractScriptGenerator.readTemplateFiles(SCRIPTS_START_STR)) {
+//                return 1;
+//            }
             status = execute();
             zipWorkfile();
-            WorkingdirGenerator.getInstance().delete();
+            if(!options.isDebug()) {
+                WorkingdirGenerator.getInstance().delete();
+            }
         }
         long end = System.currentTimeMillis();
         if(logger != null) {

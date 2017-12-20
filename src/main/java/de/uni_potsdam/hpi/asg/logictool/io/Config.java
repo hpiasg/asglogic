@@ -30,8 +30,6 @@ public class Config {
 
     //@formatter:off
     
-    @XmlElement(name = "tools", required = true)
-    public ToolConfig toolconfig;
     @XmlElement(name = "workdir", required = false)
     public String  workdir;
     @XmlElement(name = "defaulttech", required = false)

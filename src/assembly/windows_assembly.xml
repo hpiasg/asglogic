@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright (C) 2015 - 2016 Norman Kluge
+Copyright (C) 2015 - 2017 Norman Kluge
  
 This file is part of ASGlogic.
 
@@ -57,13 +57,6 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 				<include>config/**/*</include>
 				<include>tools/espresso/espresso.exe</include>
 				<include>tools/espresso/LICENSE.ESPRESSO.txt</include>
-				<include>tools/mpsat/LICENSE.MPSAT</include>
-				<include>tools/mpsat/mpsat.exe</include>
-				<include>tools/petrify/LICENSE.PETRIFY.txt</include>
-				<include>tools/petrify/petrify.exe</include>
-				<include>tools/petrify/petrify.dll</include>
-				<include>tools/petrify/LICENSE.CYGWIN.txt</include>
-				<include>tools/petrify/cygwin1.dll</include>
 			</includes>
 			<excludes>
 				<exclude>config/logicconfig*</exclude>
@@ -78,6 +71,13 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/desij</directory>
+			<outputDirectory>.</outputDirectory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/asgwrapper-asynctools</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>
 				<include>**/*</include>

@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.mapping.seqanddeco;
 
 /*
- * Copyright (C) 2015 - 2016 Norman Kluge
+ * Copyright (C) 2015 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -28,13 +28,15 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.asgtoolswrapper.DesiJInvoker;
+import de.uni_potsdam.hpi.asg.asynctoolswrapper.PetrifyInvoker;
+import de.uni_potsdam.hpi.asg.common.invoker.InvokeReturn;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.stg.GFile;
 import de.uni_potsdam.hpi.asg.common.stg.model.STG;
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraphComputer;
 
@@ -85,8 +87,14 @@ public class AndDecoSGHelper {
         File newfile_dkc_log = new File(workingDir, basename + "_dkc.log");
 
         GFile.writeGFile(stg, newfile_d);
-        LogicInvoker.getInstance().invokeDesijKilldummies(newfile_dk, newfile_d);
-        LogicInvoker.getInstance().invokePetrifyCSC(newfile_dk, newfile_dkc_log, newfile_dkc);
+        InvokeReturn killDummiesRet = DesiJInvoker.killDummies(newfile_dk, newfile_d);
+        if(killDummiesRet == null || !killDummiesRet.getResult()) {
+            return null;
+        }
+        InvokeReturn cscRet = PetrifyInvoker.solveCSC(newfile_dk, newfile_dkc_log, newfile_dkc);
+        if(cscRet == null || !cscRet.getResult()) {
+            return null;
+        }
 
         STG stg2 = GFile.importFromFile(newfile_dkc);
         LoggerHelper.setLogLevel(LogManager.getLogger(StateGraphComputer.class), Level.OFF);
