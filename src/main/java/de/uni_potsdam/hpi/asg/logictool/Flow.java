@@ -82,6 +82,8 @@ public class Flow {
             return 1;
         }
 
+//        new GraphicalStateGraph(stateGraph, true, null);
+
         // Flow agents generation
         if(!generateFlowAgents(stateGraph)) {
             return 1;
