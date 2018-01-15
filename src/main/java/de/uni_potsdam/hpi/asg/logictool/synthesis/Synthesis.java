@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.synthesis;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -22,17 +22,30 @@ package de.uni_potsdam.hpi.asg.logictool.synthesis;
 import de.uni_potsdam.hpi.asg.logictool.mapping.TechnologyMapper;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
+import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
+import de.uni_potsdam.hpi.asg.logictool.synthesis.helper.RegionCalculator;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 
 public abstract class Synthesis {
 
-    protected Netlist       netlist;
-    protected String        resetname;
-    protected EspressoTable table;
+    protected StateGraph       stateGraph;
+    protected Netlist          netlist;
+    protected String           resetname;
+    protected EspressoTable    table;
+    protected RegionCalculator regCalc;
 
-    public Synthesis(Netlist netlist, String resetname) {
+    public Synthesis(StateGraph stateGraph, Netlist netlist, String resetname) {
+        this.stateGraph = stateGraph;
         this.netlist = netlist;
         this.resetname = resetname;
+    }
+
+    public boolean doRegionCalculation() {
+        regCalc = RegionCalculator.create(stateGraph);
+        if(regCalc == null) {
+            return false;
+        }
+        return true;
     }
 
     public abstract boolean doTableSynthesis();

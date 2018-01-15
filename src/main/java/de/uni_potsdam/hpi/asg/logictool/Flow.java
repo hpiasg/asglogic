@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2014 - 2017 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -105,6 +105,11 @@ public class Flow {
     }
 
     private int executeFlow() {
+        // Calculate regions
+        if(!syn.doRegionCalculation()) {
+            logger.error("Region calculation failed");
+            return 1;
+        }
         // Generate a function table from the state graph 
         if(!syn.doTableSynthesis()) {
             logger.error("Table synthesis failed");

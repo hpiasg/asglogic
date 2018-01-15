@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.synthesis;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -25,13 +25,14 @@ import org.apache.logging.log4j.Logger;
 import de.uni_potsdam.hpi.asg.logictool.mapping.TechnologyMapper;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
+import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 
 public class ComplexGateSynthesis extends Synthesis {
     private static final Logger logger = LogManager.getLogger();
 
-    public ComplexGateSynthesis(Netlist netlist, String resetname) {
-        super(netlist, resetname);
+    public ComplexGateSynthesis(StateGraph stateGraph, Netlist netlist, String resetname) {
+        super(stateGraph, netlist, resetname);
     }
 
     @Override

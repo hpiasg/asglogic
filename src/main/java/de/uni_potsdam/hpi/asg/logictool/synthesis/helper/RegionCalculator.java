@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.synthesis.helper;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -45,18 +45,25 @@ public class RegionCalculator {
     private Map<Signal, Regions> regions;
     private StateGraph           stategraph;
 
-    public RegionCalculator(StateGraph stateGraph) {
+    private RegionCalculator(StateGraph stateGraph) {
         this.stategraph = stateGraph;
-        this.regions = computeRegions(stateGraph.getStates());
+    }
+
+    public static RegionCalculator create(StateGraph stateGraph) {
+        RegionCalculator retVal = new RegionCalculator(stateGraph);
+        if(!retVal.computeRegions()) {
+            return null;
+        }
+        return retVal;
     }
 
     public Map<Signal, Regions> getRegions() {
         return regions;
     }
 
-    private Map<Signal, Regions> computeRegions(Set<State> states) {
-
-        Map<Signal, Regions> retVal = new HashMap<Signal, Regions>();
+    private boolean computeRegions() {
+        Set<State> states = stategraph.getStates();
+        regions = new HashMap<Signal, Regions>();
 
         Set<State> statelow = new TreeSet<State>();
         Set<State> statehigh = new TreeSet<State>();
@@ -86,10 +93,15 @@ public class RegionCalculator {
                             break;
                     }
                 }
-                retVal.put(sig, new Regions(findCFRegions(sig, staterising, statehigh), findCFRegions(sig, statefalling, statelow)));
+                List<CFRegion> rising = findCFRegions(sig, staterising, statehigh);
+                List<CFRegion> falling = findCFRegions(sig, statefalling, statelow);
+                if(rising == null || falling == null) {
+                    return false;
+                }
+                regions.put(sig, new Regions(rising, falling));
             }
         }
-        return retVal;
+        return true;
     }
 
     private List<CFRegion> findCFRegions(Signal sig, Set<State> eStates, Set<State> qStates) {

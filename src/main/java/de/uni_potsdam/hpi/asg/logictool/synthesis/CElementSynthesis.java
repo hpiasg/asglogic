@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.synthesis;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -50,7 +50,6 @@ import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.function.CElementFunctionSynthesis;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.function.CElementFunctionSynthesis.ComplementaryDecision;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.helper.MonotonicCoverChecker;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.helper.RegionCalculator;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.table.CElementTableSynthesis;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.table.TableSynthesis;
@@ -62,19 +61,15 @@ public class CElementSynthesis extends Synthesis {
     public static final String                 setEnding   = separator + "set";
     public static final String                 resetEnding = separator + "reset";
 
-    private StateGraph                         stateGraph;
     private CElementFunctionSynthesis          syn2;
     private EspressoOptimiser                  optimiser;
     private SortedSet<Signal>                  outsignals;
-    private RegionCalculator                   regCalc;
     private Map<Signal, ComplementaryDecision> networksComplementaryMap;
     private Arch                               arch;
 
     public CElementSynthesis(StateGraph stateGraph, Netlist netlist, String resetname, Arch arch) {
-        super(netlist, resetname);
-        this.stateGraph = stateGraph;
+        super(stateGraph, netlist, resetname);
         this.optimiser = new EspressoOptimiser();
-        this.regCalc = new RegionCalculator(stateGraph);
         this.outsignals = new TreeSet<>();
         this.arch = arch;
         this.networksComplementaryMap = new HashMap<>();
