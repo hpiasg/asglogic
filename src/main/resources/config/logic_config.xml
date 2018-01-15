@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <!--
-Copyright 2015 - 2016 Norman Kluge
+Copyright 2015 - 2018 Norman Kluge
  
 This file is part of ASGlogic.
  
@@ -18,12 +18,5 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <logicconfig>
-    <tools>
-    	<desijcmd>$BASEDIR/bin/DesiJ</desijcmd>
-        <espressocmd>$BASEDIR/tools/espresso/espresso</espressocmd>
-        <petrifycmd>$BASEDIR/tools/petrify/petrify</petrifycmd>
-        <punfcmd>$BASEDIR/tools/punf/punf</punfcmd>
-        <mpsatcmd>$BASEDIR/tools/mpsat/mpsat</mpsatcmd>
-    </tools>
     <workdir />
 </logicconfig>

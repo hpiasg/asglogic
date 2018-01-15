@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2014 - 2017 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -40,8 +40,10 @@ import net.sf.javabdd.JFactory;
 
 public class LogicMain {
 
-    public static final String             DEF_CONFIG_FILE_NAME = "logicconfig.xml";
-    public static final File               DEF_CONFIG_FILE      = new File(CommonConstants.DEF_CONFIG_DIR_FILE, DEF_CONFIG_FILE_NAME);
+    public static final String             DEF_CONFIG_FILE_NAME      = "logic_config.xml";
+    public static final File               DEF_CONFIG_FILE           = new File(CommonConstants.DEF_CONFIG_DIR_FILE, DEF_CONFIG_FILE_NAME);
+    public static final String             DEF_TOOL_CONFIG_FILE_NAME = "logic_toolconfig.xml";
+    public static final File               DEF_TOOL_CONFIG_FILE      = new File(CommonConstants.DEF_CONFIG_DIR_FILE, DEF_TOOL_CONFIG_FILE_NAME);
 
     private static Logger                  logger;
     private static LogicCommandlineOptions options;
@@ -49,7 +51,7 @@ public class LogicMain {
     public static boolean                  tooldebug;
 
     // Magic number: Initial node size of the BDD factory for the Netlist data structure.
-    private static final int               netlistNodesize      = 10000;
+    private static final int               netlistNodesize           = 10000;
 
     /**
      * Main entrance of program.

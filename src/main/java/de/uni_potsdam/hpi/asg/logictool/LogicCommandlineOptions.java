@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2015 - 2017 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -56,8 +56,8 @@ public class LogicCommandlineOptions extends CommandlineOptions {
     private File workfile = new File(System.getProperty("user.dir"), "logic" + CommonConstants.ZIP_FILE_EXTENSION);
     @Option(name = "-cfg", metaVar = "<configfile>", usage = "Config file, default is " + LogicMain.DEF_CONFIG_FILE_NAME)
     private File configfile = LogicMain.DEF_CONFIG_FILE;
-    @Option(name = "-toolcfg", metaVar = "<configfile>", usage = "External tools config file, default is " + CommonConstants.DEF_TOOL_CONFIG_FILE_NAME)
-    private File toolconfigfile = CommonConstants.DEF_TOOL_CONFIG_FILE;
+    @Option(name = "-toolcfg", metaVar = "<configfile>", usage = "External tools config file, default is " + LogicMain.DEF_TOOL_CONFIG_FILE_NAME)
+    private File toolconfigfile = LogicMain.DEF_TOOL_CONFIG_FILE;
     @Option(name = "-w", metaVar = "<workingdir>", usage = "Working directory. If not given, the value in configfile is used. If there is no entry, 'logicwork*' in the os default tmp dir is used.")
     private File workingdir = null;
 

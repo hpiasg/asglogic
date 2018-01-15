@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2014 - 2017 Norman Kluge
+Copyright 2014 - 2018 Norman Kluge
  
 This file is part of ASGlogic.
  
@@ -189,6 +189,11 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									<arg
 										line="${project.build.directory}/asgwrapper-asynctools-${wrapper-async.version} ${project.build.directory}/asgwrapper-asynctools" />
 								</exec>
+								<!-- Wrapper-asg -->
+								<exec executable="mv">
+									<arg
+										line="${project.build.directory}/asgwrapper-asgtools-${wrapper-asg.version} ${project.build.directory}/asgwrapper-asgtools" />
+								</exec>
 							</target>
 						</configuration>
 					</execution>
@@ -226,9 +231,6 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 								<program>
 									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicMain</mainClass>
 									<id>ASGlogic</id>
-									<commandLineArguments>
-										<commandLineArgument>-cfg "$BASEDIR"/config/logicconfig.xml</commandLineArgument>
-									</commandLineArguments>
 									<jvmSettings>
 										<extraArguments>
 											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
@@ -293,6 +295,14 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 											<groupId>de.uni_potsdam.hpi.asg</groupId>
 											<artifactId>asgwrapper-asynctools</artifactId>
 											<version>${wrapper-async.version}</version>
+											<classifier>unix</classifier>
+											<type>tar.gz</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asgtools</artifactId>
+											<version>${wrapper-asg.version}</version>
 											<classifier>unix</classifier>
 											<type>tar.gz</type>
 											<outputDirectory>${project.build.directory}</outputDirectory>
@@ -408,6 +418,14 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 											<groupId>de.uni_potsdam.hpi.asg</groupId>
 											<artifactId>asgwrapper-asynctools</artifactId>
 											<version>${wrapper-async.version}</version>
+											<classifier>win</classifier>
+											<type>zip</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asgtools</artifactId>
+											<version>${wrapper-asg.version}</version>
 											<classifier>win</classifier>
 											<type>zip</type>
 											<outputDirectory>${project.build.directory}</outputDirectory>
