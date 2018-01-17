@@ -60,6 +60,7 @@ public class StateGraphComputer extends AbstractSTGGraphComputer<State> {
 
     public StateGraphComputer(STG stg, SortedSet<Signal> sortedSignals, CSCSolver cscsolver) {
         super(State.class, stg);
+        this.insertPlacesIntoEmptyPostset = true;
         this.sortedSignals = new TreeSet<Signal>();
         for(Signal sig : sortedSignals) {
             if(!sig.isDummy()) {
