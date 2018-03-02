@@ -185,14 +185,20 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 									<arg line="/c move ${project.build.directory}/desij-${desij.version} ${project.build.directory}/desij" />
 								</exec>
 								<!-- Wrapper-async -->
-								<exec executable="mv">
+								<exec executable="mv" osfamily="unix">
 									<arg
 										line="${project.build.directory}/asgwrapper-asynctools-${wrapper-async.version} ${project.build.directory}/asgwrapper-asynctools" />
 								</exec>
+								<exec executable="cmd" osfamily="windows">
+									<arg line="/c move ${project.build.directory}/asgwrapper-asynctools-${wrapper-async.version} ${project.build.directory}/asgwrapper-asynctools" />
+								</exec>
 								<!-- Wrapper-asg -->
-								<exec executable="mv">
+								<exec executable="mv" osfamily="unix">
 									<arg
 										line="${project.build.directory}/asgwrapper-asgtools-${wrapper-asg.version} ${project.build.directory}/asgwrapper-asgtools" />
+								</exec>
+								<exec executable="cmd" osfamily="windows">
+									<arg line="/c move ${project.build.directory}/asgwrapper-asgtools-${wrapper-asg.version} ${project.build.directory}/asgwrapper-asgtools" />
 								</exec>
 							</target>
 						</configuration>
