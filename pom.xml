@@ -320,16 +320,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 				</plugins>
 			</build>
-			<dependencies>
-				<dependency>
-					<groupId>net.strongdesign</groupId>
-					<artifactId>desij</artifactId>
-					<version>${desij.version}</version>
-					<classifier>unix</classifier>
-					<type>tar.gz</type>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
+			<dependencies />
 		</profile>
 		<profile>
 			<id>windowsbuild</id>
@@ -443,16 +434,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 				</plugins>
 			</build>
-			<dependencies>
-				<dependency>
-					<groupId>net.strongdesign</groupId>
-					<artifactId>desij</artifactId>
-					<version>${desij.version}</version>
-					<classifier>win</classifier>
-					<type>zip</type>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
+			<dependencies />
 		</profile>
 	</profiles>
 	<dependencies>
