@@ -9,13 +9,27 @@ Download and unpack the appropriate package for your operating system (on UNIX w
 
 ### Configuration ###
 
-The default configuration file is `ASGlogic_DIR/config/logicconfig.xml`. You can specify another config file with the `-cfg <file>` option of ASGlogic.
+You should generate the configuration files with [ASGconfigGen](https://github.com/hpiasg/asgconfiggen).
+
+#### Main configuration file ####
+
+The default main configuration file is `ASGlogic_DIR/config/logic_config.xml`. You can specify another config file with the `-cfg <file>` option of ASGlogic.
 
 The `<workdir>` tag specifies a path where ASGlogic stores all temporary files during operation. The default value is empty (and therefore a default operating system directory is used). You can override these settings with `-w <dir>` option of ASGlogic.
 
-With the `<tools>` tag (and subtags) you can specify the command line to call external tools. Defaults are the included versions of the tools.
+The `<defaulttech>` tag specifies the path to the default technology used for implementation (The file must be in [Genlib format](https://www.ece.cmu.edu/~ee760/760docs/genlib.pdf)).
 
-You can generate a configuration file with [ASGconfigGen](https://github.com/hpiasg/asgconfiggen).
+#### External tools configuration file ####
+
+The external tools configuration file specifies how third party (and ASGtools) are called from within ASGlogic. For details see [ASGconfigGen](https://github.com/hpiasg/asgconfiggen).
+
+ASGlogic uses the following external tools:
+* DesiJ (v3.1.2 is included)
+* Espresso (v2.3 is included)
+* MPSAT (v4.41beta is included)
+* Petrify (included)
+* PUNF (v8.51 is included)
+
 
 ### Usage ###
 
