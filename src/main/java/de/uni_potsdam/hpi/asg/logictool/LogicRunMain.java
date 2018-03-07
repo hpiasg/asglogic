@@ -54,7 +54,11 @@ public class LogicRunMain {
             }
         }
 
-        LoggerHelper.initLogger(3, null, false, Mode.gui);
+        if(isDebug) {
+            LoggerHelper.initLogger(3, null, true, Mode.cmdline);
+        } else {
+            LoggerHelper.initLogger(3, null, false, Mode.gui);
+        }
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
