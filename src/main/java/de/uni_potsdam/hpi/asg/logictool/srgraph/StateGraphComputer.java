@@ -84,6 +84,8 @@ public class StateGraphComputer extends AbstractSTGGraphComputer<State> {
             return null;
         }
 
+//        new GraphicalStateGraph(new StateGraph(stg, init, states2, sortedSignals), false, null);
+
         if(!checkCSC(states2)) {
             if(cscsolver != null) {
                 String newfilename = stg.getFile().getName() + "_csc.g";
