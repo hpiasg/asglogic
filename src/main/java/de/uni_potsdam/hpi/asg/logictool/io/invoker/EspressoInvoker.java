@@ -52,7 +52,7 @@ public class EspressoInvoker extends ExternalToolsInvoker {
         if(!ret.getResult()) {
             return ret;
         }
-        if(!FileHelper.getInstance().writeFile(outFile, ret.getOutput())) {
+        if(!FileHelper.getInstance().writeFile(outFile, ret.getOutputStr())) {
             ret.setResult(false);
         }
         return ret;
