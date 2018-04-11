@@ -100,7 +100,7 @@ public class LogicMain {
                 return 1;
             }
             Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-            WorkingdirGenerator.getInstance().create(options.getWorkingdir(), config.workdir, "resynwork");
+            WorkingdirGenerator.getInstance().create(options.getWorkingdir(), config.workdir, "logicwork");
             tooldebug = options.isTooldebug();
             logger.debug("Using tool config file " + options.getToolConfigFile());
             if(!ExternalToolsInvoker.init(options.getToolConfigFile(), tooldebug)) {
