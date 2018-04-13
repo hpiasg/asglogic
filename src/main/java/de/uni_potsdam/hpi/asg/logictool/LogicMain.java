@@ -26,12 +26,12 @@ import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.invoker.ExternalToolsInvoker;
 import de.uni_potsdam.hpi.asg.common.invoker.local.ShutdownThread;
-import de.uni_potsdam.hpi.asg.common.iohelper.BasedirHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.LoggerHelper.Mode;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.iohelper.Zipper;
 import de.uni_potsdam.hpi.asg.common.misc.CommonConstants;
+import de.uni_potsdam.hpi.asg.common.technology.Technology;
 import de.uni_potsdam.hpi.asg.logictool.io.Config;
 import de.uni_potsdam.hpi.asg.logictool.io.ConfigFile;
 import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
@@ -133,7 +133,7 @@ public class LogicMain {
         BDDFactory storage = JFactory.init(netlistNodesize, netlistNodesize / 4);
         storage.setCacheRatio(4f);
 
-        TechLibrary tech = readTechnology(options.getTechnology(), config.defaultTech, storage);
+        TechLibrary tech = readTechnology(options.getTechnologyName(), options.getTechnologyFile(), config.defaultTech, storage);
         if(tech == null) {
             logger.error("No technology found");
             return 1;
@@ -143,26 +143,37 @@ public class LogicMain {
         return flow.execute();
     }
 
-    private static TechLibrary readTechnology(File optTech, String cfgTech, BDDFactory storage) {
-        if(optTech != null) {
-            if(optTech.exists()) {
-                logger.debug("Using options technology file: " + optTech.getAbsolutePath());
-                return TechLibrary.importFromFile(optTech, storage);
+    private static TechLibrary readTechnology(String optTechName, File optTechFile, String cfgTech, BDDFactory storage) {
+
+        if(optTechName != null) {
+            File f = new File(CommonConstants.DEF_TECH_DIR_FILE, optTechName + CommonConstants.XMLTECH_FILE_EXTENSION);
+            if(f.exists()) {
+                logger.debug("Using installed technology '" + optTechName + "'");
+                Technology tech = Technology.readIn(f);
+                return TechLibrary.importFromFile(tech.getGenLib(), storage);
             } else {
-                logger.warn("Options technology file " + optTech.getAbsolutePath() + " not found. Trying default from config");
+                logger.warn("Installed technology '" + optTechName + "' does not exist. Trying other options..");
+            }
+        }
+
+        if(optTechFile != null) {
+            if(optTechFile.exists()) {
+                logger.debug("Using options technology file: " + optTechFile.getAbsolutePath());
+                return TechLibrary.importFromFile(optTechFile, storage);
+            } else {
+                logger.warn("Options technology file '" + optTechFile.getAbsolutePath() + "' not found. Trying default from config");
             }
         }
 
         if(cfgTech != null) {
-            File cfgTechFile = BasedirHelper.replaceBasedirAsFile(cfgTech);
-            if(cfgTechFile.exists()) {
-                logger.debug("Using config technology file: " + cfgTechFile.getAbsolutePath());
-                return TechLibrary.importFromFile(cfgTechFile, storage);
+            File f = new File(CommonConstants.DEF_TECH_DIR_FILE, cfgTech + CommonConstants.XMLTECH_FILE_EXTENSION);
+            if(f.exists()) {
+                logger.debug("Using installed technology '" + optTechName + "'");
+                Technology tech = Technology.readIn(f);
+                return TechLibrary.importFromFile(tech.getGenLib(), storage);
             } else {
-                logger.warn("Config technology file " + cfgTechFile.getAbsolutePath() + " not found.");
+                logger.warn("Config technology '" + cfgTech + "' not found.");
             }
-        } else {
-            logger.warn("No default technology in config file defined");
         }
 
         return null;

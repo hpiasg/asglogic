@@ -35,8 +35,11 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     //@formatter:off
 
-    @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping (GenLib format)")
-    private File technology;
+    @Option(name = "-lib", metaVar = "<technology file>", usage = "Technology library for technology mapping (GenLib format)")
+    private File technologyFile;
+    @Option(name = "-tech", metaVar = "<technology name>", usage = "Name of installed technology for technology mapping (preferred)")
+    private String technologyName;
+    
     @Option(name = "-out", metaVar = "<file>", usage = "Synthesis outfile, default is logic" + CommonConstants.VERILOG_FILE_EXTENSION)
     private File synthesisOutfile = new File(System.getProperty("user.dir") + File.separator + "logic" + CommonConstants.VERILOG_FILE_EXTENSION);
 
@@ -102,10 +105,6 @@ public class LogicCommandlineOptions extends CommandlineOptions {
         return gfile;
     }
 
-    public File getTechnology() {
-        return technology;
-    }
-
     public File getWorkingdir() {
         return workingdir;
     }
@@ -132,5 +131,13 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     public boolean isTooldebug() {
         return tooldebug;
+    }
+
+    public File getTechnologyFile() {
+        return technologyFile;
+    }
+
+    public String getTechnologyName() {
+        return technologyName;
     }
 }
