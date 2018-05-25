@@ -87,7 +87,7 @@ public class AndDecoSGHelper {
         File newfile_dkc_log = new File(workingDir, basename + "_dkc.log");
 
         GFile.writeGFile(stg, newfile_d);
-        InvokeReturn killDummiesRet = DesiJInvoker.killDummies(newfile_dk, newfile_d);
+        InvokeReturn killDummiesRet = DesiJInvoker.killDummies(newfile_dk, newfile_d, false);
         if(killDummiesRet == null || !killDummiesRet.getResult()) {
             return null;
         }
