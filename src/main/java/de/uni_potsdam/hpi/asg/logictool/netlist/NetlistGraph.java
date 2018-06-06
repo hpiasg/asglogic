@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.netlist;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -32,7 +32,6 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.NoMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
@@ -99,16 +98,16 @@ public class NetlistGraph extends JFrame {
             Signal sig = netlist.getSignalByNetlistVariable(var);
             Object source = null;
             if(sig != null) {
-                if(sig.getType() == SignalType.input) {
-                    String id = sig.getName();
-                    String style = "shape=ellipse";
-                    Object v = graph.insertVertex(parent, null, id, 0, 0, 0, 0, style);
-                    graph.updateCellSize(v);
-                    mxGeometry geo = graph.getCellGeometry(v);
-                    mxGeometry geo2 = new mxGeometry(0, 0, geo.getWidth() * 1.5, geo.getHeight() * 1.5);
-                    model.setGeometry(v, geo2);
-                    source = v;
-                }
+//                if(sig.getType() == SignalType.input) {
+                String id = sig.getName();
+                String style = "shape=ellipse";
+                Object v = graph.insertVertex(parent, null, id, 0, 0, 0, 0, style);
+                graph.updateCellSize(v);
+                mxGeometry geo = graph.getCellGeometry(v);
+                mxGeometry geo2 = new mxGeometry(0, 0, geo.getWidth() * 1.5, geo.getHeight() * 1.5);
+                model.setGeometry(v, geo2);
+                source = v;
+//                }
             }
             if(source == null) {
                 source = map.get(var.getDriver());

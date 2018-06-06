@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.io.invoker;
 
 /*
- * Copyright (C) 2017 Norman Kluge
+ * Copyright (C) 2017 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -40,7 +40,7 @@ public class EspressoInvoker extends ExternalToolsInvoker {
     private InvokeReturn internalOptimise(File inFile, File outFile) {
         //@formatter:off
         List<String> params = Arrays.asList(
-            "-of", "-eonset", "-Dso", 
+            "-of", "-eonset", "-Dso", "-S1", // "-Dexact", //, //"-Dexact", //"-Dso","-Dso", "-S1" 
             inFile.getName()
         );
         //@formatter:on

@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.netlist;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -104,5 +104,9 @@ public class NetlistVariable implements Comparable<NetlistVariable> {
             }
         }
         return true;
+    }
+
+    protected void changeName(String newName) {
+        this.name = newName;
     }
 }

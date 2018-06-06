@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.reset;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -97,5 +97,13 @@ public class Reset {
 
     public Map<Signal, ResetDecision> getDecision() {
         return decider.getDecision();
+    }
+
+    public ResetDecider getDecider() {
+        return decider;
+    }
+
+    public ResetInserter getInserter() {
+        return inserter;
     }
 }

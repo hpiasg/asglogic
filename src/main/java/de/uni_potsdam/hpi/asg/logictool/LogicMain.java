@@ -139,7 +139,7 @@ public class LogicMain {
             return 1;
         }
 
-        Flow flow = new Flow(options, tech, storage);
+        AdvancedFlow flow = new AdvancedFlow(options, tech, storage);
         return flow.execute();
     }
 

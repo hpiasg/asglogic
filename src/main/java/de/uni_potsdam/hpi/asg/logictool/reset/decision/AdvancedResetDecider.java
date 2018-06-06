@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.reset.decision;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -41,25 +41,52 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
 import net.sf.javabdd.BDD;
 
-public class AdvancedCElementResetDecider extends ResetDecider {
-    private static final Logger      logger = LogManager.getLogger();
+public class AdvancedResetDecider extends ResetDecider {
+    private static final Logger          logger = LogManager.getLogger();
 
-    private Map<Signal, Set<Signal>> dependencies;
+    private Map<Signal, Set<Signal>>     dependencies;
 
-    public AdvancedCElementResetDecider(Reset reset, Arch arch) {
+    private Map<Signal, Boolean>         highCubesImplementable;
+    private Map<Signal, Boolean>         lowCubesImplementable;
+    private Map<Signal, NetlistVariable> highImplVar;
+    private Map<Signal, NetlistVariable> lowImplVar;
+    private Map<Signal, NetlistVariable> celemImplVar;
+
+    private Map<Signal, Boolean>         highReset;
+    private Map<Signal, Boolean>         lowReset;
+
+    public AdvancedResetDecider(Reset reset, Arch arch) {
         super(reset);
         dependencies = new HashMap<>();
+        highReset = new HashMap<>();
+        lowReset = new HashMap<>();
+    }
+
+    public void setData(Map<Signal, NetlistVariable> celemImplVar, Map<Signal, Boolean> highCubesImplementable, Map<Signal, NetlistVariable> highImplVar, Map<Signal, Boolean> lowCubesImplementable, Map<Signal, NetlistVariable> lowImplVar) {
+        this.celemImplVar = celemImplVar;
+        this.highCubesImplementable = highCubesImplementable;
+        this.highImplVar = highImplVar;
+        this.lowCubesImplementable = lowCubesImplementable;
+        this.lowImplVar = lowImplVar;
     }
 
     @Override
     public boolean decide(Netlist netlist) {
         for(Signal sig : reset.getStategraph().getAllSignals()) {
             if(sig.isInternalOrOutput()) {
-//				logger.debug("Check " + sig.getName());
-//				logger.debug(reset.getStategraph().getInitState().getStateValues().get(sig));
                 dependencies.put(sig, new HashSet<Signal>());
-                if(!checkResetting(sig, netlist)) {
+                if(!checkResettingCelem(sig, netlist)) {
                     return false;
+                }
+                if(highCubesImplementable.get(sig)) {
+                    if(!checkResettingCombinatorial(sig, netlist, highImplVar.get(sig), highReset)) {
+                        highCubesImplementable.put(sig, false);
+                    }
+                }
+                if(lowCubesImplementable.get(sig)) {
+                    if(!checkResettingCombinatorial(sig, netlist, lowImplVar.get(sig), lowReset)) {
+                        lowCubesImplementable.put(sig, false);
+                    }
                 }
             }
         }
@@ -79,9 +106,29 @@ public class AdvancedCElementResetDecider extends ResetDecider {
         return true;
     }
 
-    private boolean checkResetting(Signal sig, Netlist netlist) {
-        NetlistVariable var = netlist.getNetlistVariableBySignal(sig);
-        NetlistTerm celemterm = var.getDriver();
+    private boolean checkResettingCombinatorial(Signal sig, Netlist netlist, NetlistVariable var, Map<Signal, Boolean> resultMap) {
+        BDD bdd = computeNetwork(var, netlist, sig);
+        switch(reset.getStategraph().getInitState().getStateValues().get(sig)) {
+            case falling:
+            case high:
+                if(bdd.isOne()) {
+                    resultMap.put(sig, false);
+                } else {
+                    resultMap.put(sig, true);
+                }
+            case low:
+            case rising:
+                if(bdd.isZero()) {
+                    resultMap.put(sig, false);
+                } else {
+                    resultMap.put(sig, true);
+                }
+        }
+        return true;
+    }
+
+    private boolean checkResettingCelem(Signal sig, Netlist netlist) {
+        NetlistTerm celemterm = celemImplVar.get(sig).getDriver();
         if(!(celemterm instanceof NetlistCelem)) {
             logger.error("Signal " + sig.getName() + " is not driven by an Celem");
             return false;
@@ -173,5 +220,13 @@ public class AdvancedCElementResetDecider extends ResetDecider {
                 return bdd.restrict(var.toNotBDD());
         }
         return null;
+    }
+
+    public Map<Signal, Boolean> getHighReset() {
+        return highReset;
+    }
+
+    public Map<Signal, Boolean> getLowReset() {
+        return lowReset;
     }
 }

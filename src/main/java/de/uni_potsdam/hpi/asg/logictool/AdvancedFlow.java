@@ -35,24 +35,23 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.TechnologyMapper;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.Arch;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
-import de.uni_potsdam.hpi.asg.logictool.reset.decision.AdvancedCElementResetDecider;
+import de.uni_potsdam.hpi.asg.logictool.reset.decision.AdvancedResetDecider;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.FullReset;
 import de.uni_potsdam.hpi.asg.logictool.reset.decision.ResetDecider;
+import de.uni_potsdam.hpi.asg.logictool.reset.insert.AdvancedResetInserter;
 import de.uni_potsdam.hpi.asg.logictool.reset.insert.ResetInserter;
-import de.uni_potsdam.hpi.asg.logictool.reset.insert.SimpleCElementResetInserter;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraphComputer;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.csc.CSCSolver;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.csc.ExternalCSCSolver;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.csc.ExternalCSCSolver.ExternalCSCSolverConfig;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.CElementSynthesis;
+import de.uni_potsdam.hpi.asg.logictool.synthesis.AdvancedSynthesis;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.EspressoOptimiser;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.Synthesis;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
 import net.sf.javabdd.BDDFactory;
 
-public class Flow {
+public class AdvancedFlow {
     private static final Logger     logger    = LogManager.getLogger();
     private static final String     resetname = "_reset";
 
@@ -63,13 +62,13 @@ public class Flow {
 
     // Flow agents
     private Reset                   reset;
-    private Synthesis               syn;
+    private AdvancedSynthesis       syn;
     private EspressoOptimiser       optimiser;
     private TechnologyMapper        map;
     private GateMerger              merge;
     private VerilogOutput           verilogout;
 
-    public Flow(LogicCommandlineOptions options, TechLibrary techlib, BDDFactory storage) {
+    public AdvancedFlow(LogicCommandlineOptions options, TechLibrary techlib, BDDFactory storage) {
         this.options = options;
         this.techlib = techlib;
         this.storage = storage;
@@ -133,7 +132,12 @@ public class Flow {
             logger.error("Function synthesis failed");
             return 1;
         }
+
         // Check if reset needed
+        if(reset.getDecider() instanceof AdvancedResetDecider) {
+            ((AdvancedResetDecider)reset.getDecider()).setData(syn.getCelemImplVar(), syn.getHighCubesImplementable(), syn.getHighImplVar(), syn.getLowCubesImplementable(), syn.getLowImplVar());
+        }
+
         if(!reset.decide(netlist)) {
             logger.error("Reset decision failed");
             return 1;
@@ -144,6 +148,9 @@ public class Flow {
             return 1;
         }
         // Insert reset logic if needed
+        if(reset.getInserter() instanceof AdvancedResetInserter) {
+            ((AdvancedResetInserter)reset.getInserter()).setData(syn.getCelemImplVar(), syn.getHighCubesImplementable(), syn.getHighImplVar(), syn.getLowCubesImplementable(), syn.getLowImplVar());
+        }
         if(!reset.insertPostSynthesis(netlist)) {
             logger.error("Reset insertion (pre-synthesis) failed");
             return 1;
@@ -177,7 +184,7 @@ public class Flow {
         netlist = new Netlist(storage, stateGraph, reset);
 
         // Synthesis - generating a abstract gate netlist from the state graph
-        syn = new CElementSynthesis(stateGraph, netlist, resetname, arch);
+        syn = new AdvancedSynthesis(stateGraph, netlist, resetname, arch);
         // Espresso optimiser - optimises a function table with Espresso
         optimiser = new EspressoOptimiser();
 
@@ -224,11 +231,11 @@ public class Flow {
             default:
                 logger.warn("Reset mechanism '" + options.getResettype() + "' undefined. Using default 'ondemand'");
             case "ondemand":
-                decider = new AdvancedCElementResetDecider(reset, arch);
+                decider = new AdvancedResetDecider(reset, arch);
                 break;
         }
         // A reset inserter inserts reset logic, if the decider had chosen to
-        ResetInserter inserter = new SimpleCElementResetInserter(reset, arch);
+        ResetInserter inserter = new AdvancedResetInserter(reset, arch);
         reset.setDecider(decider);
         reset.setInserter(inserter);
         return reset;

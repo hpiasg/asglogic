@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.netlist;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -318,6 +318,9 @@ public class Netlist {
                 continue;
             }
             NetlistTerm t2 = checkvar.getDriver();
+            if(retVal.contains(t2)) {
+                continue;
+            }
             retVal.add(t2);
             check.addAll(BDDHelper.getVars(t2.getBdd(), this));
         }
@@ -393,9 +396,16 @@ public class Netlist {
         return Collections.unmodifiableCollection(nameVarMap.values());
     }
 
-    void removeTerm(NetlistTerm term) {
+    public void removeTerm(NetlistTerm term) {
         this.terms.remove(term.getBdd());
         this.unmappedTerms.remove(term);
         this.mappedTerms.remove(term);
+//        term.getDrivee().setDriver(null);//?
+    }
+
+    public void changeNetlistVarName(NetlistVariable var, String name) {
+        this.nameVarMap.remove(var.getName());
+        var.changeName(name);
+        this.nameVarMap.put(var.getName(), var);
     }
 }
