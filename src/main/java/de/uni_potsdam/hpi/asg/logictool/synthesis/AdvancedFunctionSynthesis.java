@@ -91,9 +91,6 @@ public class AdvancedFunctionSynthesis {
             logger.error("Netlist could not be postprocessed");
             return false;
         }
-        if(!netlist.killBuffers()) {
-            logger.error("Removing of buffers failed");
-        }
         return true;
     }
 
@@ -206,24 +203,20 @@ public class AdvancedFunctionSynthesis {
     private boolean createLowImplementation(Signal sig, String name) {
         Set<NetlistVariable> ands_low = lowAndNetwork.get(sig);
         NetlistVariable lowNetworkName = null;
-        if(ands_low.size() != 1) {
-            BDD orbdd_low = netlist.getFac().zero();
-            if(ands_low.isEmpty()) {
-                logger.warn("Low-Network is empty: " + name + ", " + ands_low.toString());
-            } else {
-                for(NetlistVariable var : ands_low) {
-                    orbdd_low = orbdd_low.or(var.toBDD());
-                }
-            }
-            NetlistTerm lowNetwork = netlist.getNetlistTermByBdd(orbdd_low);
-            if(lowNetwork.getDrivee() != null) {
-                lowNetworkName = lowNetwork.getDrivee();
-            } else {
-                lowNetworkName = netlist.getNetlistVariableByName(name + AdvancedSynthesis.lowEnding);
-                netlist.addConnection(lowNetworkName, lowNetwork);
-            }
+        BDD orbdd_low = netlist.getFac().zero();
+        if(ands_low.isEmpty()) {
+            logger.warn("Low-Network is empty: " + name + ", " + ands_low.toString());
         } else {
-            lowNetworkName = ands_low.iterator().next();
+            for(NetlistVariable var : ands_low) {
+                orbdd_low = orbdd_low.or(var.toBDD());
+            }
+        }
+        NetlistTerm lowNetwork = netlist.getNetlistTermByBdd(orbdd_low);
+        if(lowNetwork.getDrivee() != null) {
+            lowNetworkName = lowNetwork.getDrivee();
+        } else {
+            lowNetworkName = netlist.getNetlistVariableByName(name + AdvancedSynthesis.lowEnding);
+            netlist.addConnection(lowNetworkName, lowNetwork);
         }
         NetlistTerm lowNotNetwork = netlist.getNetlistTermByBdd(lowNetworkName.toNotBDD());
         NetlistVariable lowNotNetworkName = null;
@@ -239,10 +232,6 @@ public class AdvancedFunctionSynthesis {
 
     private boolean createHighImplementation(Signal sig, String name) {
         Set<NetlistVariable> ands_high = highAndNetwork.get(sig);
-        if(ands_high.size() == 1) {
-            highImplVar.put(sig, ands_high.iterator().next());
-            return true;
-        }
         BDD orbdd_high = netlist.getFac().zero();
         if(ands_high.isEmpty()) {
             logger.warn("High-Network is empty: " + name + ", " + ands_high.toString());
@@ -340,7 +329,6 @@ public class AdvancedFunctionSynthesis {
         netlist.addConnection(celemVar, celem);
 
         celemImplVar.put(sig, celemVar);
-
         return true;
     }
 

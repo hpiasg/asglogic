@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.mapping.model;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -47,6 +47,13 @@ public abstract class Mapping {
                 t.setMapping(this);
             }
         }
+    }
+
+    public boolean replaceVar(NetlistVariable replacement, NetlistVariable obsolete) {
+        if(this.drivee == obsolete) {
+            this.drivee = replacement;
+        }
+        return true;
     }
 
     public abstract boolean isMapped();

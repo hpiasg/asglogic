@@ -83,6 +83,8 @@ public class AdvancedSynthesis {
         this.outsignals = new TreeSet<>();
         this.arch = arch;
         this.celemCubesImplementable = new HashMap<>();
+        this.highCubesImplementable = new HashMap<>();
+        this.lowCubesImplementable = new HashMap<>();
     }
 
     public boolean doRegionCalculation() {
@@ -112,18 +114,19 @@ public class AdvancedSynthesis {
         EspressoTable tmptable = table;
         while(true) {
             AdvancedMonotonicCoverChecker mchecker = new AdvancedMonotonicCoverChecker(stateGraph, signals, regCalc.getRegions(), tmptable, resetname);
-            if(mchecker.check()) {
-                this.highCubesImplementable = mchecker.getHighCubesMonotonicCover();
-                this.lowCubesImplementable = mchecker.getLowCubesMonotonicCover();
+            boolean result = mchecker.check();
+            highCubesImplementable.putAll(mchecker.getHighCubesMonotonicCover());
+            lowCubesImplementable.putAll(mchecker.getLowCubesMonotonicCover());
+            if(result) {
                 break;
+            }
+            // monotic cover check failed. try to resynthesise
+            if(mchecker.getMonotonicityViolatingStates() != null) {
+                regCalc.apply(mchecker.getMonotonicityViolatingStates());
+                signals = mchecker.getNonMonotonSignals();
             } else {
-                if(mchecker.getMonotonicityViolatingStates() != null) {
-                    regCalc.apply(mchecker.getMonotonicityViolatingStates());
-                    signals = mchecker.getNonMonotonSignals();
-                } else {
-                    logger.error("Cannot ensure monotonic cover for " + mchecker.getNonMonotonSignals());
-                    return false;
-                }
+                logger.error("Cannot ensure monotonic cover for " + mchecker.getNonMonotonSignals());
+                return false;
             }
             syn = new AdvancedTableSynthesis(stateGraph, signals, regCalc.getRegions(), resetname);
             tmptable = syn.synthesise();
@@ -136,7 +139,6 @@ public class AdvancedSynthesis {
             } else {
                 table.mergeIn(tmptable, signals);
             }
-
         }
         return true;
     }
@@ -219,7 +221,7 @@ public class AdvancedSynthesis {
     }
 
     public boolean doPostMappingSynthesis(TechnologyMapper mapper) {
-//        new NetlistGraph(netlist, null, true);
+//        new NetlistGraph(netlist, null, false);
         Set<NetlistTerm> termsToKepp = new HashSet<>();
         for(Signal sig : stateGraph.getAllSignals()) {
             if(sig.isInternalOrOutput()) {
@@ -263,15 +265,18 @@ public class AdvancedSynthesis {
                     termsToKepp.addAll(netlist.getDrivingNetworkTransitive(highImplVar.get(sig)));
 //                    netlist.addConnection(netlist.getNetlistVariableBySignal(sig), highImplVar.get(sig).getDriver());
 //                    netlist.addMapping(new WireMapping(highImplVar.get(sig), netlist.getNetlistVariableBySignal(sig), netlist));
-                    netlist.changeNetlistVarName(highImplVar.get(sig), sig.getName());
+//                    netlist.changeNetlistVarName(highImplVar.get(sig), sig.getName());
+                    netlist.replaceVar(netlist.getNetlistVariableBySignal(sig), highImplVar.get(sig));
                 } else if(smallest == lowSize) {
                     // low impl
                     termsToKepp.addAll(netlist.getDrivingNetworkTransitive(lowImplVar.get(sig)));
-                    netlist.changeNetlistVarName(lowImplVar.get(sig), sig.getName());
+                    //netlist.changeNetlistVarName(lowImplVar.get(sig), sig.getName());
+                    netlist.replaceVar(netlist.getNetlistVariableBySignal(sig), lowImplVar.get(sig));
                 } else if(smallest == celemSize) {
                     //Celem impl
                     termsToKepp.addAll(netlist.getDrivingNetworkTransitive(celemImplVar.get(sig)));
-                    netlist.changeNetlistVarName(celemImplVar.get(sig), sig.getName());
+//                    netlist.changeNetlistVarName(celemImplVar.get(sig), sig.getName());
+                    netlist.replaceVar(netlist.getNetlistVariableBySignal(sig), celemImplVar.get(sig));
                 } else {
                     logger.error("No implementation for signal " + sig.getName());
                 }
@@ -285,165 +290,14 @@ public class AdvancedSynthesis {
             }
         }
 
-//                System.out.println(sig.getName());
-//                System.out.println("\tCelem: " + celemSize);
-//                System.out.println("\tHigh: " + highSize);
-//                System.out.println("\tLow: " + lowSize);
+//        new NetlistGraph(netlist, null, true);
 
-//				System.out.println(sig.getName() + ": " + networksComplementaryMap.get(sig));
-//                ComplementaryDecision decision = networksComplementaryMap.get(sig);
-//                if(decision != ComplementaryDecision.NONE) {
-////					new NetlistGraph(netlist, null, false);
-//                    // optimised
-//                    NetlistVariable var = netlist.getNetlistVariableBySignal(sig);
-//                    NetlistTerm celemterm = var.getDriver();
-//                    if(!(celemterm instanceof NetlistCelem)) {
-//                        logger.error("Signal " + sig.getName() + " is not driven by an Celem");
-//                        return false;
-//                    }
-//                    NetlistCelem celem = (NetlistCelem)celemterm;
-//                    boolean forceset = false, forcereset = false;
-//                    // get data for choosing network
-//                    Set<NetlistTerm> setnetwork = new HashSet<>();
-//                    Set<NetlistTerm> resetnetwork = new HashSet<>();
-//                    float setsize = getSizeOfDriverNetwork(celem.getSetInput(), setnetwork);
-//                    float resetsize = getSizeOfDriverNetwork(celem.getResetInput(), resetnetwork);
-//                    if(setsize == -1 || resetsize == -1) {
-//                        return false;
-//                    }
-//                    if(setsize == -2) {
-//                        forcereset = true;
-//                    }
-//                    if(resetsize == -2) {
-//                        forceset = true;
-//                    }
-//
-//                    // choose
-//                    Boolean chooseset = null;
-//                    Boolean keepcelem = null;
-//                    if(!forceset && !forcereset) {
-//                        //no unmapped networks
-//                        switch(decision) {
-//                            case BOTH:
-//                                chooseset = setsize <= resetsize;
-//                                keepcelem = false;
-//                                break;
-//                            case RESETONLY:
-//                                chooseset = false;
-//                                keepcelem = false;
-//                                break;
-//                            case RESETANDC:
-//                                chooseset = false;
-//                                keepcelem = true;
-//                                break;
-//                            case SETONLY:
-//                                chooseset = true;
-//                                keepcelem = false;
-//                                break;
-//                            case SETANDC:
-//                                chooseset = true;
-//                                keepcelem = true;
-//                                break;
-//                            case NONE:
-//                                //should not happen
-//                                return false;
-//                        }
-//                    } else if(forceset && forcereset) {
-//                        //both unmapped?!
-//                        logger.error("Both networks of signal " + sig.getName() + " are unmapped");
-//                        return false;
-//                    } else if(forceset) {
-//                        //set network partly unmapped
-//                        switch(decision) {
-//                            case SETONLY:
-//                            case BOTH:
-//                                chooseset = true;
-//                                keepcelem = false;
-//                                break;
-//                            case SETANDC:
-//                                chooseset = true;
-//                                keepcelem = true;
-//                                break;
-//                            case RESETANDC:
-//                            case RESETONLY:
-//                                logger.error("Complementary Mapping: Only Resetnetwork can be chosen, but it is unmapped");
-//                                return false;
-//                            case NONE:
-//                                //should not happen
-//                                return false;
-//                        }
-//                    } else { //forcereset
-//                        //set network partly unmapped
-//                        switch(decision) {
-//                            case RESETONLY:
-//                            case BOTH:
-//                                chooseset = false;
-//                                keepcelem = false;
-//                                break;
-//                            case RESETANDC:
-//                                chooseset = false;
-//                                keepcelem = true;
-//                                break;
-//                            case SETANDC:
-//                            case SETONLY:
-//                                logger.error("Complementary Mapping: Only Setnetwork can be chosen, but it is unmapped");
-//                                return false;
-//                            case NONE:
-//                                //should not happen
-//                                return false;
-//                        }
-//                    }
-//
-//                    if(chooseset == null || keepcelem == null) {
-//                        logger.error("Decision not found");
-//                        return false;
-//                    }
-//
-//                    if(keepcelem) {
-//                        //actually SETANDC and RESETANDC is the same as NONE
-//                        continue;
-//                    }
-//
-//                    // apply
-//                    // remove celem
-//                    celem.remove();
-//                    if(chooseset) {
-//                        // take set network
-//                        Signal inpSig = netlist.getSignalByNetlistVariable(celem.getSetInput());
-//                        if(inpSig != null) {
-//                            netlist.replaceMapping(new WireMapping(celem.getSetInput(), var, netlist));
-//                        } else {
-//                            netlist.changeConnection(var, celem.getSetInput().getDriver());
-//                        }
-//                        if(!celem.getResetInput().removeReaderTransitive(celem)) {
-//                            return false;
-//                        }
-//                    } else {
-//                        // take reset network
-//                        Signal inpSig = netlist.getSignalByNetlistVariable(celem.getResetInput());
-//                        if(inpSig != null) {
-//                            netlist.replaceMapping(new WireMapping(celem.getResetInput(), var, netlist));
-//                        } else {
-//                            netlist.changeConnection(var, celem.getResetInput().getDriver());
-//                        }
-//                        if(!celem.getSetInput().removeReaderTransitive(celem)) {
-//                            return false;
-//                        }
+        if(!netlist.mergeWires()) {
+            logger.error("Merging wires failed");
+            return false;
+        }
 
-//            }
-//
-//        }
-//        if(!netlist.checkNotResetNeeded())
-//
-//        {
-//            return false;
-//        }
-
-//		for(Mapping map : netlist.getMappings()) {
-//			System.out.println(map.toString());
-//		}
-
-//		new NetlistGraph(netlist, null, true);
+//        new NetlistGraph(netlist, null, true);
         return true;
     }
 

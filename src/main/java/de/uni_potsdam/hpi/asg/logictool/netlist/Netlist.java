@@ -42,6 +42,7 @@ import de.uni_potsdam.hpi.asg.logictool.helper.BDDComparator;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDHelper;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.Mapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.NoMapping;
+import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.InternalArch;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
@@ -168,21 +169,28 @@ public class Netlist {
         return (NetlistCelem)terms.get(bdd);
     }
 
-    public boolean killBuffers() {
-        Queue<NetlistTerm> check = new LinkedList<>(unmappedTerms);
+    public boolean mergeWires() {
+        Queue<NetlistTerm> check = new LinkedList<>(mappedTerms.keySet());
         while(!check.isEmpty()) {
-            NetlistTerm t = check.poll();
-            if(t instanceof NetlistBuffer) {
-                NetlistBuffer buffer = (NetlistBuffer)t;
-//				System.out.println("Killing Buffer " + buffer.toString());
-                terms.remove(buffer.getBdd());
-                unmappedTerms.remove(buffer);
-                buffer.getInpvar().removeReader(buffer);
-                if(getSignalByNetlistVariable(t.getDrivee()) == null) {
-                    // right var is no signal
-                    replace(buffer.getInpvar(), t.getDrivee());
+            NetlistTerm term = check.poll();
+            Mapping m = mappedTerms.get(term);
+            if(m instanceof WireMapping) {
+                WireMapping wire = (WireMapping)m;
+                Signal inSig = getSignalByNetlistVariable(wire.getDriver());
+                Signal outSig = getSignalByNetlistVariable(wire.getDrivee());
+                // in -> [wire] -> out
+                if(outSig == null) {
+                    // "out" is not a signal, so replace all occurrences of "out" with "in"
+                    terms.remove(term.getBdd());
+                    mappedTerms.remove(term);
+                    replaceVar(wire.getDriver(), wire.getDrivee());
+                } else if(inSig == null) {
+                    // "out" is a signal, but "in" is not, so replace all occurrences of "in" with "out"
+                    terms.remove(term.getBdd());
+                    mappedTerms.remove(term);
+                    replaceVar(wire.getDrivee(), wire.getDriver());
                 } else {
-                    replace(t.getDrivee(), buffer.getInpvar());
+                    // "in" and "out" are signals, so keep wire
                 }
             }
         }
@@ -211,24 +219,24 @@ public class Netlist {
             drivee.setDriver(driver);
             driver.setDrivee(drivee);
         } else {
-            replace(driver.getDrivee(), drivee);
+            replaceVar(driver.getDrivee(), drivee);
         }
     }
 
-    private boolean replace(NetlistVariable replacement, NetlistVariable obsolete) {
+    public boolean replaceVar(NetlistVariable replacement, NetlistVariable obsolete) {
 //		System.out.println("Replacing " + obsolete.getName() + " with " + replacement.getName());
 //		System.out.println("-- Before --");
 //		for(NetlistTerm t : unmappedTerms) {
 //			System.out.println(t.toString());
 //		}
         Set<NetlistTerm> rmTerms = new HashSet<>();
-        for(NetlistTerm term : unmappedTerms) {
+        for(NetlistTerm term : new HashSet<>(terms.values())) {
             switch(term.replace(replacement, obsolete)) {
                 case 0: // okay
                     continue;
                 case 1: // already in index
                     NetlistTerm properTerm = terms.get(term.getBdd());
-                    replace(properTerm.getDrivee(), term.getDrivee());
+                    replaceVar(properTerm.getDrivee(), term.getDrivee());
                     rmTerms.add(term);
                     break;
                 case -1: // fail
@@ -239,7 +247,7 @@ public class Netlist {
             }
         }
         for(NetlistTerm t : rmTerms) {
-            unmappedTerms.remove(t);
+            terms.remove(t.getBdd());
         }
 
         return true;
@@ -310,12 +318,14 @@ public class Netlist {
         check.add(var);
         while(!check.isEmpty()) {
             NetlistVariable checkvar = check.poll();
-            if(quasiSignals.containsKey(checkvar)) {
-                continue;
-            }
-            Signal sig = getSignalByNetlistVariable(checkvar);
-            if(sig != null) {
-                continue;
+            if(checkvar != var) {
+                if(quasiSignals.containsKey(checkvar)) {
+                    continue;
+                }
+                Signal sig = getSignalByNetlistVariable(checkvar);
+                if(sig != null) {
+                    continue;
+                }
             }
             NetlistTerm t2 = checkvar.getDriver();
             if(retVal.contains(t2)) {
@@ -400,7 +410,11 @@ public class Netlist {
         this.terms.remove(term.getBdd());
         this.unmappedTerms.remove(term);
         this.mappedTerms.remove(term);
-//        term.getDrivee().setDriver(null);//?
+        term.getDrivee().setDriver(null);
+        Set<NetlistVariable> vars = BDDHelper.getVars(term.getBdd(), this);
+        for(NetlistVariable var : vars) {
+            var.removeReader(term);
+        }
     }
 
     public void changeNetlistVarName(NetlistVariable var, String name) {

@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.mapping.model;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -38,6 +38,14 @@ public class WireMapping extends Mapping {
         super(netlist.getNetlistTermByBdd(driver.toBDD()));
         this.driver = driver;
         this.drivee = drivee;
+    }
+
+    @Override
+    public boolean replaceVar(NetlistVariable replacement, NetlistVariable obsolete) {
+        if(this.driver == obsolete) {
+            this.driver = replacement;
+        }
+        return super.replaceVar(replacement, obsolete);
     }
 
     @Override

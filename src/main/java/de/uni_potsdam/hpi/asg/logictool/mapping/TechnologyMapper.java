@@ -38,7 +38,9 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.IntermediateGateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.MapPairing;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.NoMapping;
+import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
+import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistBuffer;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
@@ -224,6 +226,14 @@ public class TechnologyMapper {
     }
 
     public boolean map(NetlistTerm func) {
+        if(func instanceof NetlistBuffer) {
+            NetlistBuffer buf = (NetlistBuffer)func;
+            Set<NetlistTerm> terms = new HashSet<>();
+            terms.add(buf);
+            netlist.addMapping(new WireMapping(buf.getInpvar(), buf.getDrivee(), netlist, terms));
+            return true;
+        }
+
         IntermediateGateMapping igmapping = map(func.getBdd(), func.getLoopVar(), func.buildingLoopbackAllowed());
         if(igmapping == null) {
             return false;

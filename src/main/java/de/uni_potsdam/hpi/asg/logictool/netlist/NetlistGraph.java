@@ -32,6 +32,7 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.NoMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
@@ -66,7 +67,7 @@ public class NetlistGraph extends JFrame {
             if(t instanceof NetlistCelem) {
                 id = "CELEM (" + t.getLoopVar().getName() + ")";
             } else if(t instanceof NetlistBuffer) {
-                id = "BUF";
+                id = "BUF " + t.toString();
             } else {
                 id = t.toString();
             }
@@ -96,34 +97,39 @@ public class NetlistGraph extends JFrame {
 
         for(NetlistVariable var : netlist.getVars()) {
             Signal sig = netlist.getSignalByNetlistVariable(var);
-            Object source = null;
             if(sig != null) {
-//                if(sig.getType() == SignalType.input) {
-                String id = sig.getName();
+                String id = "";
+                if(sig.getType() == SignalType.input) {
+                    id = "IN: " + sig.getName();
+                } else { //out/int
+                    id = "OUT: " + sig.getName();
+                }
                 String style = "shape=ellipse";
                 Object v = graph.insertVertex(parent, null, id, 0, 0, 0, 0, style);
                 graph.updateCellSize(v);
                 mxGeometry geo = graph.getCellGeometry(v);
                 mxGeometry geo2 = new mxGeometry(0, 0, geo.getWidth() * 1.5, geo.getHeight() * 1.5);
                 model.setGeometry(v, geo2);
-                source = v;
-//                }
-            }
-            if(source == null) {
-                source = map.get(var.getDriver());
-            }
-            String str = var.getName();
-            String style = "";
-            if(colorsignals != null) {
-                for(String cs : colorsignals) {
-                    if(var.getName().contains(cs)) {
-                        style += "strokeColor=red";
+                if(sig.getType() != SignalType.input) {
+                    graph.insertEdge(parent, null, id, map.get(var.getDriver()), v, "");
+                }
+                for(NetlistTerm t : var.getReader()) {
+                    graph.insertEdge(parent, null, id, v, map.get(t), "");
+                }
+            } else {
+                Object source = map.get(var.getDriver());
+                String str = var.getName();
+                String style = "";
+                if(colorsignals != null) {
+                    for(String cs : colorsignals) {
+                        if(var.getName().contains(cs)) {
+                            style += "strokeColor=red";
+                        }
                     }
                 }
-            }
-
-            for(NetlistTerm t : var.getReader()) {
-                graph.insertEdge(parent, null, str, source, map.get(t), style);
+                for(NetlistTerm t : var.getReader()) {
+                    graph.insertEdge(parent, null, str, source, map.get(t), style);
+                }
             }
         }
 

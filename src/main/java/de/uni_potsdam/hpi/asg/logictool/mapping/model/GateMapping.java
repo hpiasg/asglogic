@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.mapping.model;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -54,6 +54,17 @@ public class GateMapping extends Mapping {
         super(terms, drivee);
         this.gate = gate;
         this.mapping = mapping;
+    }
+
+    @Override
+    public boolean replaceVar(NetlistVariable replacement, NetlistVariable obsolete) {
+        for(TechVariable var : mapping.keySet()) {
+            if(mapping.get(var) == obsolete) {
+                mapping.put(var, replacement);
+                break;
+            }
+        }
+        return super.replaceVar(replacement, obsolete);
     }
 
     @Override
