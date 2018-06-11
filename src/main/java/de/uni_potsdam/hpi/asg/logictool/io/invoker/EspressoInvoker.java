@@ -20,6 +20,7 @@ package de.uni_potsdam.hpi.asg.logictool.io.invoker;
  */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,20 +34,25 @@ public class EspressoInvoker extends ExternalToolsInvoker {
         super("espresso");
     }
 
-    public static InvokeReturn optimise(File inFile, File outFile) {
-        return new EspressoInvoker().internalOptimise(inFile, outFile);
+    public static InvokeReturn optimise(File inFile, File outFile, boolean exact, int timeout) {
+        return new EspressoInvoker().internalOptimise(inFile, outFile, exact, timeout);
     }
 
-    private InvokeReturn internalOptimise(File inFile, File outFile) {
+    private InvokeReturn internalOptimise(File inFile, File outFile, boolean exact, int timeout) {
+        List<String> params = new ArrayList<>();
         //@formatter:off
-        List<String> params = Arrays.asList(
-            "-of", "-eonset", "-Dso", "-S1", // "-Dexact", //, //"-Dexact", //"-Dso","-Dso", "-S1" 
-            inFile.getName()
-        );
+        params.addAll(Arrays.asList(
+            "-of", "-eonset", "-Dso" //"-S1", // "-Dexact", //, //"-Dexact", //"-Dso","-Dso", "-S1" 
+        ));
         //@formatter:on
+        if(exact) {
+            params.add("-S1");
+        }
+        params.add(inFile.getName());
 
         addInputFilesToCopy(inFile);
 
+        setTimeout(timeout);
         InvokeReturn ret = run(params, "espresso_" + inFile.getName());
         errorHandling(ret);
         if(!ret.getResult()) {
