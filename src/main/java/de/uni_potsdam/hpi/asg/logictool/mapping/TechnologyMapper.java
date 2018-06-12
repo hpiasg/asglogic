@@ -166,8 +166,12 @@ public class TechnologyMapper {
                 }
 
                 markForNoMapping.addAll(celemMissing);
-                markForNoMapping.addAll(highMissing);
-                markForNoMapping.addAll(lowMissing);
+                if(highMissing != null) {
+                    markForNoMapping.addAll(highMissing);
+                }
+                if(lowMissing != null) {
+                    markForNoMapping.addAll(lowMissing);
+                }
             }
         }
 
