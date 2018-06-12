@@ -31,7 +31,7 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import net.sf.javabdd.BDD;
 
-public class ArbitraryAndGateDecomposer {
+public class ArbitraryAndGateDecomposer implements AndGateDecomposer {
     private static final Logger logger = LogManager.getLogger();
 
     private Netlist             netlist;
@@ -40,6 +40,7 @@ public class ArbitraryAndGateDecomposer {
         this.netlist = netlist;
     }
 
+    @Override
     public boolean decomposeAND(NetlistTerm term) {
 
         Set<NetlistVariable> vars = BDDHelper.getVars(term.getBdd(), netlist);

@@ -28,6 +28,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -191,10 +198,28 @@ public class TechnologyMapper {
 
     private int decompose() {
         int numOfDeco = 0;
-        for(NetlistTerm term : new ArrayList<>(netlist.getUnmappedTerms())) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        for(final NetlistTerm term : new ArrayList<>(netlist.getUnmappedTerms())) {
             if(!unmappableTerms.contains(term)) {
                 if(BDDHelper.isAndGate(term.getBdd())) {
-                    if(seqanddeco.decomposeAND(term)) {
+                    Callable<Boolean> task = new Callable<Boolean>() {
+                        public Boolean call() {
+                            return seqanddeco.decomposeAND(term);
+                        }
+                    };
+                    Future<Boolean> future = executor.submit(task);
+                    boolean result = false;
+                    try {
+                        result = future.get(10, TimeUnit.SECONDS);
+                    } catch(TimeoutException ex) {
+                        logger.debug("SeqBaseAndDeco: " + term.toString() + " timeout");
+                    } catch(InterruptedException e) {
+                    } catch(ExecutionException e) {
+                    } finally {
+                        future.cancel(true); // may or may not desire this
+                    }
+
+                    if(result) {
                         numOfDeco++;
                     } else {
                         if(unsafeanddeco) {
@@ -215,6 +240,7 @@ public class TechnologyMapper {
                 }
             }
         }
+        executor.shutdown();
         return numOfDeco;
     }
 
