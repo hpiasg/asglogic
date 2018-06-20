@@ -30,7 +30,7 @@ public class EspressoExactWrapper {
     private static final Logger logger = LogManager.getLogger();
 
     public static InvokeReturn optimise(File inFile, File outFile) {
-        InvokeReturn ret = EspressoInvoker.optimise(inFile, outFile, true, 10000);
+        InvokeReturn ret = EspressoInvoker.optimise(inFile, outFile, true, 5000);
         if(ret == null || !ret.getResult()) {
             logger.info("Espresso exact failed (Timeout?). Try heuristic solution");
             return EspressoInvoker.optimise(inFile, outFile, false, 0);

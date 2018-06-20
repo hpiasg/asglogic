@@ -34,7 +34,7 @@ public class NetlistTerm {
     private static final Logger logger = LogManager.getLogger();
 
     public enum NetlistTermAnnotation {
-        rstNew, rstPart
+        rstNew, rstPart, unsafeAndDeco
     }
 
     private BDD                            bdd;
@@ -164,7 +164,7 @@ public class NetlistTerm {
         return loopVar;
     }
 
-    void addAnnotation(NetlistTermAnnotation annot) {
+    public void addAnnotation(NetlistTermAnnotation annot) {
         annotations.add(annot);
     }
 

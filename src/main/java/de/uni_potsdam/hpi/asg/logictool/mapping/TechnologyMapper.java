@@ -49,6 +49,7 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistBuffer;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
+import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.AdvancedSynthesis;
@@ -95,6 +96,12 @@ public class TechnologyMapper {
             decomposings = decompose();
         } while(decomposings > 0);
 
+        if(unsafeanddeco) {
+            if(!checkArbitraryAndDecomposerHighLow()) {
+                return false;
+            }
+        }
+
         if(!fixComplementaryNetworksForUnmappedSignals()) {
             logger.error("Complementary mapping failed");
         }
@@ -134,6 +141,33 @@ public class TechnologyMapper {
         for(NetlistTerm term : removeTerms) {
             logger.debug("Removing term " + term.toString());
             netlist.removeTerm(term);
+        }
+        return true;
+    }
+
+    // dont use high/low implementations if arbitrary(unsafe) and deco was applied - they usually dont work
+    private boolean checkArbitraryAndDecomposerHighLow() {
+        for(Signal sig : stateGraph.getAllSignals()) {
+            if(sig.isInternalOrOutput()) {
+                if(syn.getHighCubesImplementable().get(sig)) {
+                    Set<NetlistTerm> terms = netlist.getDrivingNetworkTransitive(syn.getHighImplVar().get(sig));
+                    for(NetlistTerm t : terms) {
+                        if(t.containsAnnotation(NetlistTermAnnotation.unsafeAndDeco)) {
+                            syn.getHighCubesImplementable().put(sig, false);
+                            break;
+                        }
+                    }
+                }
+                if(syn.getLowCubesImplementable().get(sig)) {
+                    Set<NetlistTerm> terms = netlist.getDrivingNetworkTransitive(syn.getLowImplVar().get(sig));
+                    for(NetlistTerm t : terms) {
+                        if(t.containsAnnotation(NetlistTermAnnotation.unsafeAndDeco)) {
+                            syn.getLowCubesImplementable().put(sig, false);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         return true;
     }
