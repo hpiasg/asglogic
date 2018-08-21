@@ -59,6 +59,7 @@ public class AdvancedMonotonicCoverChecker {
 
     private Map<CFRegion, Set<State>> monotonicityViolatingStates;
     private SortedSet<Signal>         nonMonotonSignals;
+    private Map<Signal, Boolean>      celemCubesMonotonicCover;
     private Map<Signal, Boolean>      highCubesMonotonicCover;
     private Map<Signal, Boolean>      lowCubesMonotonicCover;
 
@@ -70,6 +71,7 @@ public class AdvancedMonotonicCoverChecker {
         this.allSignals = stateGraph.getAllSignals();
         this.cubemap = new HashMap<Signal, Cubes>();
         this.resetname = resetname;
+        this.celemCubesMonotonicCover = new HashMap<>();
         this.highCubesMonotonicCover = new HashMap<>();
         this.lowCubesMonotonicCover = new HashMap<>();
     }
@@ -97,14 +99,18 @@ public class AdvancedMonotonicCoverChecker {
         for(Signal sig : checkSignals) {
             if(sig.isInternalOrOutput()) {
                 Regions regions = allregions.get(sig);
-                if(!checkSingleCubes(sig, AdvancedSynthesis.setEnding, regions.getRisingRegions().size(), true)) {
-                    retVal = false;
+
+                celemCubesMonotonicCover.put(sig, checkSingleCubes(sig, AdvancedSynthesis.setEnding, regions.getRisingRegions().size(), true));
+                if(celemCubesMonotonicCover.get(sig)) {
+                    celemCubesMonotonicCover.put(sig, checkSingleCubes(sig, AdvancedSynthesis.resetEnding, regions.getFallingRegions().size(), true));
                 }
-                if(!checkSingleCubes(sig, AdvancedSynthesis.resetEnding, regions.getFallingRegions().size(), true)) {
-                    retVal = false;
-                }
+
                 highCubesMonotonicCover.put(sig, checkSingleCubes(sig, AdvancedSynthesis.highEnding, regions.getRisingRegions().size(), false));
                 lowCubesMonotonicCover.put(sig, checkSingleCubes(sig, AdvancedSynthesis.lowEnding, regions.getFallingRegions().size(), false));
+
+                if(!celemCubesMonotonicCover.get(sig) && !highCubesMonotonicCover.get(sig) && !lowCubesMonotonicCover.get(sig)) {
+                    retVal = false;
+                }
             }
         }
         return retVal;
@@ -123,7 +129,7 @@ public class AdvancedMonotonicCoverChecker {
             if(num != 1) {
                 retVal = false;
                 if(printErrors) {
-                    logger.error(sig.getName() + suffix + "_" + id + " not in one cube");
+                    logger.warn(sig.getName() + suffix + "_" + id + " not in one cube");
                 }
             }
             id++;
@@ -131,7 +137,7 @@ public class AdvancedMonotonicCoverChecker {
         if((id - 1) != numberOfRegions) {
             retVal = false;
             if(printErrors) {
-                logger.error(sig.getName() + suffix + " has " + (id - 1) + " cubes, but the model has " + numberOfRegions + " cubes");
+                logger.warn(sig.getName() + suffix + " has " + (id - 1) + " cubes, but the model has " + numberOfRegions + " cubes");
             }
         }
         return retVal;
@@ -147,12 +153,13 @@ public class AdvancedMonotonicCoverChecker {
                 BiMap<CFRegion, EspressoTerm> highCubes = HashBiMap.create();
                 BiMap<CFRegion, EspressoTerm> lowCubes = HashBiMap.create();
 
-                if(!check1stAnd2nd(sig, AdvancedSynthesis.setEnding, regions.getRisingRegions(), risingCubes, true, false)) {
-                    return false;
+                if(celemCubesMonotonicCover.get(sig)) {
+                    celemCubesMonotonicCover.put(sig, check1stAnd2nd(sig, AdvancedSynthesis.setEnding, regions.getRisingRegions(), risingCubes, true, false));
                 }
-                if(!check1stAnd2nd(sig, AdvancedSynthesis.resetEnding, regions.getFallingRegions(), fallingCubes, true, false)) {
-                    return false;
+                if(celemCubesMonotonicCover.get(sig)) {
+                    celemCubesMonotonicCover.put(sig, check1stAnd2nd(sig, AdvancedSynthesis.resetEnding, regions.getFallingRegions(), fallingCubes, true, false));
                 }
+
                 if(highCubesMonotonicCover.get(sig)) {
                     highCubesMonotonicCover.put(sig, check1stAnd2nd(sig, AdvancedSynthesis.highEnding, regions.getRisingRegions(), highCubes, false, true));
                 }
@@ -161,6 +168,10 @@ public class AdvancedMonotonicCoverChecker {
                 }
 
                 cubemap.put(sig, new Cubes(risingCubes, fallingCubes, highCubes, lowCubes));
+
+                if(!celemCubesMonotonicCover.get(sig) && !highCubesMonotonicCover.get(sig) && !lowCubesMonotonicCover.get(sig)) {
+                    retVal = false;
+                }
             }
         }
         return retVal;
@@ -190,12 +201,12 @@ public class AdvancedMonotonicCoverChecker {
             }
             if(num == 0) {
                 if(printErrors) {
-                    logger.error("No matching cube found");
+                    logger.warn("No matching cube found for signal '" + sig + "'");
                 }
                 return false;
             } else if(num > 1) {
                 if(printErrors) {
-                    logger.warn("More than one matching cube found");
+                    logger.warn("More than one matching cube found for signal '" + sig + "'");
                 }
                 return false;
             }
@@ -318,6 +329,10 @@ public class AdvancedMonotonicCoverChecker {
 
     public SortedSet<Signal> getNonMonotonSignals() {
         return nonMonotonSignals;
+    }
+
+    public Map<Signal, Boolean> getCelemCubesMonotonicCover() {
+        return celemCubesMonotonicCover;
     }
 
     public Map<Signal, Boolean> getHighCubesMonotonicCover() {

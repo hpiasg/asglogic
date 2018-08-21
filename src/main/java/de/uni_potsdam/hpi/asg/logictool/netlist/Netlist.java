@@ -319,9 +319,9 @@ public class Netlist {
         while(!check.isEmpty()) {
             NetlistVariable checkvar = check.poll();
             if(checkvar != var) {
-                if(quasiSignals.containsKey(checkvar)) {
-                    continue;
-                }
+//                if(quasiSignals.containsKey(checkvar)) {
+//                    continue;
+//                }
                 Signal sig = getSignalByNetlistVariable(checkvar);
                 if(sig != null) {
                     continue;

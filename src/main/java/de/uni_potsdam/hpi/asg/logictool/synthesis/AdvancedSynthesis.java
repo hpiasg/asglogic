@@ -99,7 +99,7 @@ public class AdvancedSynthesis {
         for(Signal sig : stateGraph.getAllSignals()) {
             if(sig.isInternalOrOutput()) {
                 outsignals.add(sig);
-                celemCubesImplementable.put(sig, true);
+//                celemCubesImplementable.put(sig, true);
             }
         }
         AdvancedTableSynthesis syn = new AdvancedTableSynthesis(stateGraph, outsignals, regCalc.getRegions(), resetname);
@@ -115,6 +115,7 @@ public class AdvancedSynthesis {
         while(true) {
             AdvancedMonotonicCoverChecker mchecker = new AdvancedMonotonicCoverChecker(stateGraph, signals, regCalc.getRegions(), tmptable, resetname);
             boolean result = mchecker.check();
+            celemCubesImplementable.putAll(mchecker.getCelemCubesMonotonicCover());
             highCubesImplementable.putAll(mchecker.getHighCubesMonotonicCover());
             lowCubesImplementable.putAll(mchecker.getLowCubesMonotonicCover());
             if(result) {
