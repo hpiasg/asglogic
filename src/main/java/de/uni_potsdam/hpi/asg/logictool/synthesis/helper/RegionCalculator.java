@@ -33,7 +33,6 @@ import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
-import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
 import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.CFRegion;
@@ -49,9 +48,9 @@ public class RegionCalculator {
         this.stategraph = stateGraph;
     }
 
-    public static RegionCalculator create(StateGraph stateGraph) {
+    public static RegionCalculator create(StateGraph stateGraph, boolean justIntOut) {
         RegionCalculator retVal = new RegionCalculator(stateGraph);
-        if(!retVal.computeRegions()) {
+        if(!retVal.computeRegions(justIntOut)) {
             return null;
         }
         return retVal;
@@ -61,7 +60,7 @@ public class RegionCalculator {
         return regions;
     }
 
-    private boolean computeRegions() {
+    private boolean computeRegions(boolean justIntOut) {
         Set<State> states = stategraph.getStates();
         regions = new HashMap<Signal, Regions>();
 
@@ -72,34 +71,40 @@ public class RegionCalculator {
 
         for(Signal sig : stategraph.getAllSignals()) {
 //			System.out.println(sig.getName());
-            if(sig.getType() == SignalType.output || sig.getType() == SignalType.internal) {
-                statelow.clear();
-                statehigh.clear();
-                statefalling.clear();
-                staterising.clear();
-                for(State state : states) {
-                    switch(state.getStateValues().get(sig)) {
-                        case low:
-                            statelow.add(state);
-                            break;
-                        case high:
-                            statehigh.add(state);
-                            break;
-                        case falling:
-                            statefalling.add(state);
-                            break;
-                        case rising:
-                            staterising.add(state);
-                            break;
-                    }
+            if(justIntOut) {
+                if(sig.isInternalOrOutput()) {
+                    continue;
                 }
-                List<CFRegion> rising = findCFRegions(sig, staterising, statehigh);
-                List<CFRegion> falling = findCFRegions(sig, statefalling, statelow);
-                if(rising == null || falling == null) {
-                    return false;
-                }
-                regions.put(sig, new Regions(rising, falling));
             }
+
+//            if(sig.getType() == SignalType.output || sig.getType() == SignalType.internal) {
+            statelow.clear();
+            statehigh.clear();
+            statefalling.clear();
+            staterising.clear();
+            for(State state : states) {
+                switch(state.getStateValues().get(sig)) {
+                    case low:
+                        statelow.add(state);
+                        break;
+                    case high:
+                        statehigh.add(state);
+                        break;
+                    case falling:
+                        statefalling.add(state);
+                        break;
+                    case rising:
+                        staterising.add(state);
+                        break;
+                }
+            }
+            List<CFRegion> rising = findCFRegions(sig, staterising, statehigh);
+            List<CFRegion> falling = findCFRegions(sig, statefalling, statelow);
+            if(rising == null || falling == null) {
+                return false;
+            }
+            regions.put(sig, new Regions(rising, falling));
+//            }
         }
         return true;
     }

@@ -25,14 +25,14 @@ import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
 
 public class CFRegion {
 
-    private State      entryState;
+//    private State      entryState;
     private Set<State> excitationRegion;
     private Set<State> quiescentRegion;
 
     public CFRegion(Set<State> excitationRegion, Set<State> quiescentRegion, State entryState) {
         this.excitationRegion = excitationRegion;
         this.quiescentRegion = quiescentRegion;
-        this.entryState = entryState;
+//        this.entryState = entryState;
     }
 
     public Set<State> getExcitationRegion() {
@@ -43,9 +43,9 @@ public class CFRegion {
         return quiescentRegion;
     }
 
-    public State getEntryState() {
-        return entryState;
-    }
+//    public State getEntryState() {
+//        return entryState;
+//    }
 
     @Override
     public String toString() {

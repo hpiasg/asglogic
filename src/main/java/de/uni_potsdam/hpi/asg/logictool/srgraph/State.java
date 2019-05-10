@@ -33,9 +33,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
+import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
 import de.uni_potsdam.hpi.asg.common.stggraph.AbstractState;
-import de.uni_potsdam.hpi.asg.common.stg.model.Signal.SignalType;
 
 public class State extends AbstractState<State> implements Comparable<State> {
     private static final Logger      logger = LogManager.getLogger();

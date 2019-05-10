@@ -88,7 +88,7 @@ public class AdvancedSynthesis {
     }
 
     public boolean doRegionCalculation() {
-        regCalc = RegionCalculator.create(stateGraph);
+        regCalc = RegionCalculator.create(stateGraph, true);
         if(regCalc == null) {
             return false;
         }
