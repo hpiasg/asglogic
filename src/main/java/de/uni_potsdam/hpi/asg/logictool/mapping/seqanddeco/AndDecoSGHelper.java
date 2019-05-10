@@ -37,8 +37,8 @@ import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.stg.GFile;
 import de.uni_potsdam.hpi.asg.common.stg.model.STG;
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraphComputer;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraphComputer;;
 
 public class AndDecoSGHelper {
     private static final Logger logger = LogManager.getLogger();

@@ -46,7 +46,7 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.InternalArch;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.reset.Reset;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 

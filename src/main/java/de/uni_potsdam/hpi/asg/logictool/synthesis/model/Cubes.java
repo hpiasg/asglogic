@@ -21,6 +21,8 @@ package de.uni_potsdam.hpi.asg.logictool.synthesis.model;
 
 import com.google.common.collect.BiMap;
 
+import de.uni_potsdam.hpi.asg.common.stghelper.model.CFRegion;
+
 public class Cubes {
 
     private BiMap<CFRegion, EspressoTerm> risingCubes;

@@ -34,7 +34,7 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.Arch;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem.InternalArch;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable.EspressoValue;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTerm;

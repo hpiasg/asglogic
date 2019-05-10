@@ -30,6 +30,7 @@ import de.uni_potsdam.hpi.asg.common.invoker.InvokeReturn;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.stg.model.STG;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.csc.CSCSolver;
 
 public class ExternalCSCSolver implements CSCSolver {
     private static final Logger logger = LogManager.getLogger();

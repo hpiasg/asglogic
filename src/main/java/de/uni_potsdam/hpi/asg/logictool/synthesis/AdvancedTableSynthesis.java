@@ -31,13 +31,13 @@ import com.google.common.collect.Table;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.logictool.helper.BitSetHelper;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.model.CFRegion;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.State;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
+import de.uni_potsdam.hpi.asg.common.stghelper.model.CFRegion;
+import de.uni_potsdam.hpi.asg.common.stghelper.model.Regions;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTable.EspressoValue;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.model.EspressoTerm;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.model.Regions;
 
 public class AdvancedTableSynthesis {
     private static final Logger  logger = LogManager.getLogger();

@@ -51,7 +51,7 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistBuffer;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
 import de.uni_potsdam.hpi.asg.logictool.synthesis.AdvancedSynthesis;
 import de.uni_potsdam.hpi.asg.logictool.techfile.Gate;
 import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
