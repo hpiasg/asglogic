@@ -254,6 +254,7 @@ public class StateGraphComputer extends AbstractSTGGraphComputer<State> {
                             }
                             states2.remove(s2);
                             entry.getValue().remove(s2);
+                            s1.getMarkings().addAll(s2.getMarkings());
                             change = true;
                             break;
                         }
