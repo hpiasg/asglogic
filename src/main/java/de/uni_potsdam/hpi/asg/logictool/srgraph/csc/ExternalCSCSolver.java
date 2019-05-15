@@ -25,7 +25,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.uni_potsdam.hpi.asg.asynctoolswrapper.PetrifyInvoker;
-import de.uni_potsdam.hpi.asg.asynctoolswrapper.PunfMpsatCSCWrapper;
+import de.uni_potsdam.hpi.asg.asynctoolswrapper.PunfMpsatWrapper;
 import de.uni_potsdam.hpi.asg.common.invoker.InvokeReturn;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
@@ -73,7 +73,7 @@ public class ExternalCSCSolver implements CSCSolver {
 
     private boolean solveCSCmspat(File stginfile, File stgoutfile) {
         logger.info("Solving CSC with mpsat");
-        InvokeReturn ret = PunfMpsatCSCWrapper.solveCSC(stginfile, stgoutfile);
+        InvokeReturn ret = PunfMpsatWrapper.solveCSC(stginfile, stgoutfile);
         if(ret == null || !ret.getResult()) {
             return false;
         }
