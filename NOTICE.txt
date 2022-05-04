@@ -6,7 +6,7 @@ The Software developed and owned by the Hasso-Plattner-Institut für Digital Eng
 
 This software makes use of the following libraries:
 
-AASGcommon v4.0.4
+ASGcommon v4.0.4
 https://github.com/hpiasg/asgcommon
 Copyright (C) 2012-2022 Universitaet Augsburg, Hasso-Plattner-Institut für Digital Engineering gGmbH
 Licensed under GNU General Public License (GPL), Version 3.0
