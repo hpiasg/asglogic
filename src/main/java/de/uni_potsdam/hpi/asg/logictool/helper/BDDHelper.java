@@ -35,7 +35,7 @@ import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.common.stggraph.AbstractState.Value;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.State;
 
 import net.sf.javabdd.BDD;
 

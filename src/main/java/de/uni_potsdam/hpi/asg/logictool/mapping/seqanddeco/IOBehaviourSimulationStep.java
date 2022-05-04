@@ -24,7 +24,7 @@ import java.util.Deque;
 import java.util.List;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.State;
 
 public class IOBehaviourSimulationStep {
 

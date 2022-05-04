@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.srgraph.csc;
 
 /*
- * Copyright (C) 2016 Norman Kluge
+ * Copyright (C) 2016 - 2017 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -24,10 +24,13 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.uni_potsdam.hpi.asg.asynctoolswrapper.PetrifyInvoker;
+import de.uni_potsdam.hpi.asg.asynctoolswrapper.PunfMpsatWrapper;
+import de.uni_potsdam.hpi.asg.common.invoker.InvokeReturn;
 import de.uni_potsdam.hpi.asg.common.iohelper.FileHelper;
 import de.uni_potsdam.hpi.asg.common.iohelper.WorkingdirGenerator;
 import de.uni_potsdam.hpi.asg.common.stg.model.STG;
-import de.uni_potsdam.hpi.asg.logictool.io.LogicInvoker;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.csc.CSCSolver;
 
 public class ExternalCSCSolver implements CSCSolver {
     private static final Logger logger = LogManager.getLogger();
@@ -61,11 +64,19 @@ public class ExternalCSCSolver implements CSCSolver {
         logger.info("Solving CSC with petrify");
         File workingDir = WorkingdirGenerator.getInstance().getWorkingDir();
         String logFileName = stgoutfile.getName().replace(".g", "") + ".log";
-        return LogicInvoker.getInstance().invokePetrifyCSC(stginfile, new File(workingDir, logFileName), stgoutfile);
+        InvokeReturn ret = PetrifyInvoker.solveCSC(stginfile, new File(workingDir, logFileName), stgoutfile);
+        if(ret == null || !ret.getResult()) {
+            return false;
+        }
+        return true;
     }
 
     private boolean solveCSCmspat(File stginfile, File stgoutfile) {
         logger.info("Solving CSC with mpsat");
-        return LogicInvoker.getInstance().invokePUNFandMPSAT(stginfile, stgoutfile);
+        InvokeReturn ret = PunfMpsatWrapper.solveCSC(stginfile, stgoutfile);
+        if(ret == null || !ret.getResult()) {
+            return false;
+        }
+        return true;
     }
 }

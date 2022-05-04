@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright (C) 2015 - 2016 Norman Kluge
+Copyright (C) 2015 - 2018 Norman Kluge
  
 This file is part of ASGlogic.
 
@@ -29,9 +29,9 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 	</formats>
 	<files>
 		<file>
-			<source>src/main/resources/config/logicconfig_unix.xml</source>
+			<source>src/main/resources/config/logic_toolconfig_unix.xml</source>
 			<outputDirectory>config</outputDirectory>
-			<destName>logicconfig.xml</destName>
+			<destName>logic_toolconfig.xml</destName>
 		</file>
 		<file>
 			<source>LICENSE.txt</source>
@@ -57,13 +57,9 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 				<include>config/**/*</include>
 				<include>tools/espresso/espresso</include>
 				<include>tools/espresso/LICENSE.ESPRESSO.txt</include>
-				<include>tools/mpsat/LICENSE.MPSAT</include>
-				<include>tools/mpsat/mpsat</include>
-				<include>tools/petrify/LICENSE.PETRIFY.txt</include>
-				<include>tools/petrify/petrify</include>
 			</includes>
 			<excludes>
-				<exclude>config/logicconfig*</exclude>
+				<exclude>config/logic_toolconfig*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -75,6 +71,20 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/desij</directory>
+			<outputDirectory>.</outputDirectory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/asgwrapper-asynctools</directory>
+			<outputDirectory>.</outputDirectory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/asgwrapper-asgtools</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>
 				<include>**/*</include>

@@ -75,10 +75,10 @@ public class RunLogicPanel extends AbstractRunPanel {
         PropertiesPanel panel = new PropertiesPanel(parent);
         tabbedPane.addTab("General", null, panel, null);
         GridBagLayout gbl_generalpanel = new GridBagLayout();
-        gbl_generalpanel.columnWidths = new int[]{150, 300, 30, 80, 0};
+        gbl_generalpanel.columnWidths = new int[]{200, 300, 30, 80, 0};
         gbl_generalpanel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_generalpanel.rowHeights = new int[]{15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0};
-        gbl_generalpanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_generalpanel.rowHeights = new int[]{15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0};
+        gbl_generalpanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel.setLayout(gbl_generalpanel);
 
         panel.addTextEntry(0, TextParam.GFile, "G file", "", true, JFileChooser.FILES_ONLY, false);
@@ -92,7 +92,7 @@ public class RunLogicPanel extends AbstractRunPanel {
         panel.addTechnologyChooserWithDefaultEntry(1, "Technology library", techs, defTech, EnumParam.TechLib, BooleanParam.TechLibDef, "Use default");
         addOutSection(panel, 2, "logic.v");
         // 4: blank
-        addIOSection(panel, 5, LogicMain.DEF_CONFIG_FILE_NAME);
+        addIOSection(panel, 5, LogicMain.DEF_CONFIG_FILE_NAME, LogicMain.DEF_TOOL_CONFIG_FILE_NAME);
 
         getDataFromPanel(panel);
     }

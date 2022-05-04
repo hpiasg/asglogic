@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2014 - 2017 Norman Kluge
+Copyright 2014 - 2022 Norman Kluge
  
 This file is part of ASGlogic.
  
@@ -23,7 +23,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uni_potsdam.hpi.asg</groupId>
 	<artifactId>asglogic</artifactId>
-	<version>0.2.0</version>
+	<version>0.3</version>
 	<organization>
 		<name>Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH</name>
 		<url>http://www.hpi.uni-potsdam.de</url>
@@ -42,13 +42,12 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<url>http://www.gnu.org/licenses/gpl.txt</url>
 		</license>
 	</licenses>
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<desij.version>3.1.2</desij.version>
-		<common.version>3.0.0</common.version>
+		<desij.version>3.3</desij.version>
+		<common.version>4.0.4</common.version>
+		<wrapper-async.version>1.1.1</wrapper-async.version>
+		<wrapper-asg.version>1.0.1</wrapper-asg.version>
 	</properties>
 	<build>
 		<resources>
@@ -128,6 +127,26 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+				<execution>
+					<id>enforce-maven</id>
+					<goals>
+					<goal>enforce</goal>
+					</goals>
+					<configuration>
+					<rules>
+						<requireMavenVersion>
+							<version>3.1.1</version>
+						</requireMavenVersion>
+					</rules>    
+					</configuration>
+				</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>javacc-maven-plugin</artifactId>
 				<version>2.6</version>
@@ -148,16 +167,16 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.1</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.20</version>
+				<version>3.0.0-M5</version>
 				<configuration>
 					<workingDirectory>${project.build.directory}/test-runs</workingDirectory>
 					<argLine>-Xmx1500m</argLine>
@@ -166,7 +185,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<phase>prepare-package</phase>
@@ -181,6 +200,22 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 								</exec>
 								<exec executable="cmd" osfamily="windows">
 									<arg line="/c move ${project.build.directory}/desij-${desij.version} ${project.build.directory}/desij" />
+								</exec>
+								<!-- Wrapper-async -->
+								<exec executable="mv" osfamily="unix">
+									<arg
+										line="${project.build.directory}/asgwrapper-asynctools-${wrapper-async.version} ${project.build.directory}/asgwrapper-asynctools" />
+								</exec>
+								<exec executable="cmd" osfamily="windows">
+									<arg line="/c move ${project.build.directory}/asgwrapper-asynctools-${wrapper-async.version} ${project.build.directory}/asgwrapper-asynctools" />
+								</exec>
+								<!-- Wrapper-asg -->
+								<exec executable="mv" osfamily="unix">
+									<arg
+										line="${project.build.directory}/asgwrapper-asgtools-${wrapper-asg.version} ${project.build.directory}/asgwrapper-asgtools" />
+								</exec>
+								<exec executable="cmd" osfamily="windows">
+									<arg line="/c move ${project.build.directory}/asgwrapper-asgtools-${wrapper-asg.version} ${project.build.directory}/asgwrapper-asgtools" />
 								</exec>
 							</target>
 						</configuration>
@@ -202,7 +237,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>appassembler-maven-plugin</artifactId>
-						<version>2.0.0</version>
+						<version>2.1.0</version>
 						<executions>
 							<execution>
 								<phase>prepare-package</phase>
@@ -219,9 +254,6 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 								<program>
 									<mainClass>de.uni_potsdam.hpi.asg.logictool.LogicMain</mainClass>
 									<id>ASGlogic</id>
-									<commandLineArguments>
-										<commandLineArgument>-cfg "$BASEDIR"/config/logicconfig.xml</commandLineArgument>
-									</commandLineArguments>
 									<jvmSettings>
 										<extraArguments>
 											<extraArgument>-Dlog4j.configurationFile=@BASEDIR@/config/log4j2_noconfig.xml</extraArgument>
@@ -246,7 +278,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
-						<version>3.0.0</version>
+						<version>3.3.0</version>
 						<configuration>
 							<descriptors>
 								<descriptor>src/assembly/unix_assembly.xml</descriptor>
@@ -265,7 +297,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>3.3.0</version>
 						<executions>
 							<execution>
 								<phase>generate-resources</phase>
@@ -282,6 +314,22 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 											<type>tar.gz</type>
 											<outputDirectory>${project.build.directory}</outputDirectory>
 										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asynctools</artifactId>
+											<version>${wrapper-async.version}</version>
+											<classifier>unix</classifier>
+											<type>tar.gz</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asgtools</artifactId>
+											<version>${wrapper-asg.version}</version>
+											<classifier>unix</classifier>
+											<type>tar.gz</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
 									</artifactItems>
 								</configuration>
 							</execution>
@@ -289,16 +337,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 				</plugins>
 			</build>
-			<dependencies>
-				<dependency>
-					<groupId>net.strongdesign</groupId>
-					<artifactId>desij</artifactId>
-					<version>${desij.version}</version>
-					<classifier>unix</classifier>
-					<type>tar.gz</type>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
+			<dependencies />
 		</profile>
 		<profile>
 			<id>windowsbuild</id>
@@ -312,7 +351,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>appassembler-maven-plugin</artifactId>
-						<version>2.0.0</version>
+						<version>2.1.0</version>
 						<executions>
 							<execution>
 								<phase>package</phase>
@@ -353,7 +392,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
-						<version>3.0.0</version>
+						<version>3.3.0</version>
 						<configuration>
 							<descriptors>
 								<descriptor>src/assembly/windows_assembly.xml</descriptor>
@@ -372,7 +411,7 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>3.3.0</version>
 						<executions>
 							<execution>
 								<phase>generate-resources</phase>
@@ -389,6 +428,22 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 											<type>zip</type>
 											<outputDirectory>${project.build.directory}</outputDirectory>
 										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asynctools</artifactId>
+											<version>${wrapper-async.version}</version>
+											<classifier>win</classifier>
+											<type>zip</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>de.uni_potsdam.hpi.asg</groupId>
+											<artifactId>asgwrapper-asgtools</artifactId>
+											<version>${wrapper-asg.version}</version>
+											<classifier>win</classifier>
+											<type>zip</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
 									</artifactItems>
 								</configuration>
 							</execution>
@@ -396,24 +451,10 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 					</plugin>
 				</plugins>
 			</build>
-			<dependencies>
-				<dependency>
-					<groupId>net.strongdesign</groupId>
-					<artifactId>desij</artifactId>
-					<version>${desij.version}</version>
-					<classifier>win</classifier>
-					<type>zip</type>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
+			<dependencies />
 		</profile>
 	</profiles>
 	<dependencies>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>20.0</version>
-		</dependency>
 		<dependency>
 			<groupId>de.uni_potsdam.hpi.asg</groupId>
 			<artifactId>asgcommon</artifactId>
@@ -425,45 +466,19 @@ along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 			<version>1.0b2</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.trove4j</groupId>
-			<artifactId>trove4j</artifactId>
-			<version>3.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-pool2</artifactId>
-			<version>2.4.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.6</version>
-		</dependency>
-		<dependency>
 			<groupId>com.github.monkeysintown</groupId>
 			<artifactId>jgraphx</artifactId>
 			<version>3.3.1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>args4j</groupId>
-			<artifactId>args4j</artifactId>
-			<version>2.33</version>
+			<groupId>de.uni_potsdam.hpi.asg</groupId>
+			<artifactId>asgwrapper-asynctools</artifactId>
+			<version>${wrapper-async.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uni_potsdam.hpi.asg</groupId>
+			<artifactId>asgwrapper-asgtools</artifactId>
+			<version>${wrapper-asg.version}</version>
 		</dependency>
 	</dependencies>
 </project>

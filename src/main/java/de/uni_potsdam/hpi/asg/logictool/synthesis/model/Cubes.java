@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.synthesis.model;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -21,14 +21,25 @@ package de.uni_potsdam.hpi.asg.logictool.synthesis.model;
 
 import com.google.common.collect.BiMap;
 
+import de.uni_potsdam.hpi.asg.common.stghelper.model.CFRegion;
+
 public class Cubes {
 
     private BiMap<CFRegion, EspressoTerm> risingCubes;
     private BiMap<CFRegion, EspressoTerm> fallingCubes;
+    private BiMap<CFRegion, EspressoTerm> highCubes;
+    private BiMap<CFRegion, EspressoTerm> lowCubes;
 
     public Cubes(BiMap<CFRegion, EspressoTerm> risingCubes, BiMap<CFRegion, EspressoTerm> fallingCubes) {
         this.risingCubes = risingCubes;
         this.fallingCubes = fallingCubes;
+    }
+
+    public Cubes(BiMap<CFRegion, EspressoTerm> risingCubes, BiMap<CFRegion, EspressoTerm> fallingCubes, BiMap<CFRegion, EspressoTerm> highCubes, BiMap<CFRegion, EspressoTerm> lowCubes) {
+        this.risingCubes = risingCubes;
+        this.fallingCubes = fallingCubes;
+        this.highCubes = highCubes;
+        this.lowCubes = lowCubes;
     }
 
     public BiMap<CFRegion, EspressoTerm> getFallingCubes() {
@@ -39,8 +50,22 @@ public class Cubes {
         return risingCubes;
     }
 
+    public BiMap<CFRegion, EspressoTerm> getHighCubes() {
+        return highCubes;
+    }
+
+    public BiMap<CFRegion, EspressoTerm> getLowCubes() {
+        return lowCubes;
+    }
+
     @Override
     public String toString() {
-        return "\n\tRising: " + risingCubes.toString() + "\n\tFalling: " + fallingCubes.toString();
+        //@formatter:off
+        return
+            "\n\tRising: " + risingCubes.toString() + 
+            "\n\tFalling: " + fallingCubes.toString() + 
+            "\n\tHigh: " + ((highCubes != null) ? highCubes.toString() : "X") +
+            "\n\tLow: " + ((lowCubes != null) ? lowCubes.toString() : "X");
+        //@formatter:on
     }
 }

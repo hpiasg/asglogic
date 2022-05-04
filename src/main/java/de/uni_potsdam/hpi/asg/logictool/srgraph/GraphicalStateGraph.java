@@ -39,6 +39,8 @@ import com.mxgraph.view.mxGraph;
 
 import de.uni_potsdam.hpi.asg.common.stg.model.Signal;
 import de.uni_potsdam.hpi.asg.common.stg.model.Transition;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.State;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
 
 public class GraphicalStateGraph extends JFrame {
 

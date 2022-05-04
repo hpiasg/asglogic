@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool;
 
 /*
- * Copyright (C) 2015 - 2017 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -35,8 +35,11 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     //@formatter:off
 
-    @Option(name = "-lib", metaVar = "<technologyfile>", usage = "Technology library for technology mapping (GenLib format)")
-    private File technology;
+    @Option(name = "-lib", metaVar = "<technology file>", usage = "Technology library for technology mapping (GenLib format)")
+    private File technologyFile;
+    @Option(name = "-tech", metaVar = "<technology name>", usage = "Name of installed technology for technology mapping (preferred)")
+    private String technologyName;
+    
     @Option(name = "-out", metaVar = "<file>", usage = "Synthesis outfile, default is logic" + CommonConstants.VERILOG_FILE_EXTENSION)
     private File synthesisOutfile = new File(System.getProperty("user.dir") + File.separator + "logic" + CommonConstants.VERILOG_FILE_EXTENSION);
 
@@ -49,11 +52,15 @@ public class LogicCommandlineOptions extends CommandlineOptions {
     private File logfile = new File(System.getProperty("user.dir"), "logic" + CommonConstants.LOG_FILE_EXTENSION);
     @Option(name = "-debug")
     private boolean debug = false;
-
+    @Option(name = "-tooldebug")
+    private boolean tooldebug = false;
+    
     @Option(name = "-zip", metaVar = "<zipfile>", usage = "Zip outfile with all temporary files, default is logic" + CommonConstants.ZIP_FILE_EXTENSION)
     private File workfile = new File(System.getProperty("user.dir"), "logic" + CommonConstants.ZIP_FILE_EXTENSION);
     @Option(name = "-cfg", metaVar = "<configfile>", usage = "Config file, default is " + LogicMain.DEF_CONFIG_FILE_NAME)
     private File configfile = LogicMain.DEF_CONFIG_FILE;
+    @Option(name = "-toolcfg", metaVar = "<configfile>", usage = "External tools config file, default is " + LogicMain.DEF_TOOL_CONFIG_FILE_NAME)
+    private File toolconfigfile = LogicMain.DEF_TOOL_CONFIG_FILE;
     @Option(name = "-w", metaVar = "<workingdir>", usage = "Working directory. If not given, the value in configfile is used. If there is no entry, 'logicwork*' in the os default tmp dir is used.")
     private File workingdir = null;
 
@@ -98,10 +105,6 @@ public class LogicCommandlineOptions extends CommandlineOptions {
         return gfile;
     }
 
-    public File getTechnology() {
-        return technology;
-    }
-
     public File getWorkingdir() {
         return workingdir;
     }
@@ -120,5 +123,21 @@ public class LogicCommandlineOptions extends CommandlineOptions {
 
     public String getCscSolving() {
         return cscSolving;
+    }
+
+    public File getToolConfigFile() {
+        return toolconfigfile;
+    }
+
+    public boolean isTooldebug() {
+        return tooldebug;
+    }
+
+    public File getTechnologyFile() {
+        return technologyFile;
+    }
+
+    public String getTechnologyName() {
+        return technologyName;
     }
 }

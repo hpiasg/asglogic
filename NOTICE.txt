@@ -1,79 +1,44 @@
-ASGlogic v0.2
-Copyright (C) 2014-2017 Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH
+ASGlogic v0.3
+Copyright (C) 2014-2022 Hasso-Plattner-Institut für Digital Engineering gGmbH
 
-This product includes software developed at Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH.
-The Software developed and owned by the Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 ("GPL") to all third parties and that license, as required by the GPL, is included in the LICENSE.txt file.
+This product includes software developed at Hasso-Plattner-Institut für Digital Engineering gGmbH.
+The Software developed and owned by the Hasso-Plattner-Institut für Digital Engineering gGmbH is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 ("GPL") to all third parties and that license, as required by the GPL, is included in the LICENSE.txt file.
 
 This software makes use of the following libraries:
 
-Apache Commons IO v2.5
-https://commons.apache.org/proper/commons-io/
-Copyright 2002-2016 The Apache Software Foundation
-Licensed under Apache License, Version 2.0
-
-Apache log4j(TM) v2.1
-http://logging.apache.org/log4j/2.x/
-Copyright (C) 1999-2014 Apache Software Foundation
-Licensed under Apache License, Version 2.0
-
-args4j v2.33
-http://args4j.kohsuke.org/
-Copyright (C) 2003-2016 Kohsuke Kawaguchi
-Licensed under the MIT license
-
-ASGcommon v3.0
+ASGcommon v4.0.4
 https://github.com/hpiasg/asgcommon
-Copyright (C) 2012-2017 Universitaet Augsburg, Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH
+Copyright (C) 2012-2022 Universitaet Augsburg, Hasso-Plattner-Institut für Digital Engineering gGmbH
 Licensed under GNU General Public License (GPL), Version 3.0
 
-Guava v20.0
-https://github.com/google/guava
-Copyright (C) 2010-2016 The Guava Authors
-Licensed under Apache License, Version 2.0
+ASGwrapper-asgtools v1.0.1
+https://github.com/hpiasg/asgwrapper-asynctools
+Copyright 2017-2022 Hasso-Plattner-Institut für Digital Engineering gGmbH
+Licensed under the GNU General Public License Version 3
 
-JavaBDD v1.0b2
-http://javabdd.sourceforge.net/
-Copyright (C) 2003-2007 John Whaley
-Licensed under GNU General Public License (GPL), Version 2.0
+ASGwrapper-asynctools v1.1.1
+https://github.com/hpiasg/asgwrapper-asynctools
+Copyright 2017-2022 Hasso-Plattner-Institut für Digital Engineering gGmbH
+Licensed under the GNU General Public License Version 3
 
 JGraphX v3.3.1.1
 http://www.jgraph.com/
-Copyright (c) 2001-2015, JGraph Ltd
+Copyright (c) 2001-2014, JGraph Ltd
 Licensed under the 3 clause BSD license
 
-JUnit v4.12
-http://junit.org/
-Copyright (C) 2002-2017 JUnit
-Licensed under Common Public License Version 1.0
-
-Trove4J v3.0.3
-http://trove.starlight-systems.com/
-Copyright (C) 2009-2012 Trove Development Team
-Licensed under the Lesser GNU Public License
+JavaBDD v1.0b2
+http://javabdd.sourceforge.net/
+Copyright (c) 2003-2007, John Whaley
+Licensed under the GNU General Public License Version 3
 
 This software makes use of the following external software:
 
-DesiJ: A Tool for STG Decomposition v3.1.1
+DesiJ: A Tool for STG Decomposition v3.2.1
 https://github.com/hpiasg/desij
-Copyright (C) 2004-2014 Universitaet Augsburg, Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH
+Copyright (C) 2004-2022 Universitaet Augsburg, Hasso-Plattner-Institut für Digital Engineering gGmbH
 Licensed under GNU General Public License (GPL), Version 3.0
 Notice: bin/DesiJ_NOTICE.txt
 
 Espresso: a two-level (PLA) logic minimizer v2.3
 Copyright (c) 1988, 1989, Regents of the University of California
 License: tools/espresso/LICENSE.ESPRESSO.txt
-
-MPSAT model checking/synthesis system v4.41beta
-http://homepages.cs.ncl.ac.uk/victor.khomenko/tools/mpsat/
-Copyright (C) 2000-2012 by Victor Khomenko
-License: tools/mpsat/LICENSE.MPSAT
-
-Petrify: a tool for synthesis of Petri Nets and asynchronous circuits
-http://www.lsi.upc.edu/~jordicf/petrify/
-Copyright (C) 1999 The Universitat Politecnica de Catalunya
-License: tools/petrify/LICSENSE.PETRIFY.txt
-
-PUNF Petri net unfolder v8.51
-http://homepages.cs.ncl.ac.uk/victor.khomenko/tools/punf/
-Copyright (C) 2000-2012 by Victor Khomenko
-License: tools/punf/LICENSE.PUNF

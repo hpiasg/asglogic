@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.mapping;
 
 /*
- * Copyright (C) 2015 Norman Kluge
+ * Copyright (C) 2015 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -28,10 +28,11 @@ import org.apache.logging.log4j.Logger;
 import de.uni_potsdam.hpi.asg.logictool.helper.BDDHelper;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
+import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
 import net.sf.javabdd.BDD;
 
-public class ArbitraryAndGateDecomposer {
+public class ArbitraryAndGateDecomposer implements AndGateDecomposer {
     private static final Logger logger = LogManager.getLogger();
 
     private Netlist             netlist;
@@ -40,6 +41,7 @@ public class ArbitraryAndGateDecomposer {
         this.netlist = netlist;
     }
 
+    @Override
     public boolean decomposeAND(NetlistTerm term) {
 
         Set<NetlistVariable> vars = BDDHelper.getVars(term.getBdd(), netlist);
@@ -102,7 +104,10 @@ public class ArbitraryAndGateDecomposer {
         newbdd = newbdd.and(var2.toBDD());
         netlist.alterTermBDD(term, newbdd);
 
+        term.addAnnotation(NetlistTermAnnotation.unsafeAndDeco);
+        term1.addAnnotation(NetlistTermAnnotation.unsafeAndDeco);
+        term2.addAnnotation(NetlistTermAnnotation.unsafeAndDeco);
+
         return true;
     }
-
 }

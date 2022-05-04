@@ -9,13 +9,27 @@ Download and unpack the appropriate package for your operating system (on UNIX w
 
 ### Configuration ###
 
-The default configuration file is `ASGlogic_DIR/config/logicconfig.xml`. You can specify another config file with the `-cfg <file>` option of ASGlogic.
+You should generate the configuration files with [ASGconfigGen](https://github.com/hpiasg/asgconfiggen).
+
+#### Main configuration file ####
+
+The default main configuration file is `ASGlogic_DIR/config/logic_config.xml`. You can specify another config file with the `-cfg <file>` option of ASGlogic.
 
 The `<workdir>` tag specifies a path where ASGlogic stores all temporary files during operation. The default value is empty (and therefore a default operating system directory is used). You can override these settings with `-w <dir>` option of ASGlogic.
 
-With the `<tools>` tag (and subtags) you can specify the command line to call external tools. Defaults are the included versions of the tools.
+The `<defaulttech>` tag specifies the path to the default technology used for implementation (The file must be in [Genlib format](https://www.ece.cmu.edu/~ee760/760docs/genlib.pdf)).
 
-You can generate a configuration file with [ASGconfigGen](https://github.com/hpiasg/asgconfiggen).
+#### External tools configuration file ####
+
+The external tools configuration file specifies how third party (and ASGtools) are called from within ASGlogic. For details see [ASGconfigGen](https://github.com/hpiasg/asgconfiggen).
+
+ASGlogic uses the following external tools:
+* DesiJ (v3.2.1 is included)
+* Espresso (v2.3 is included)
+* MPSAT (v6.31beta is included)
+* Petrify (v5.2 is included)
+* PUNF (v9.11beta (parallel) is included)
+
 
 ### Usage ###
 
@@ -60,13 +74,16 @@ With the `-rst` option you can specify whether ASGlogic will insert reset logic 
 
 ### Build instructions ###
 
-To build ASGlogic, Apache Maven v3 (or later) and the Java Development Kit (JDK) v1.7 (or later) are required.
+To build ASGlogic, Apache Maven v3.1.1 (or later) and the Java Development Kit (JDK) v1.8 (or later) are required.
 
-1. Build [ASGcommon](https://github.com/hpiasg/asgcommon)
-2. Install libraries, that can't be obtained from a central Maven repository
+1. Build [DesiJ](https://github.com/hpiasg/desij)
+2. Build [ASGcommon](https://github.com/hpiasg/asgcommon)
+3. Build [ASGwrapper-asgtools](https://github.com/hpiasg/asgwrapper-asgtools)
+4. Build [ASGwrapper-asynctools](https://github.com/hpiasg/asgwrapper-asynctools)
+5. Install libraries, that can't be obtained from a central Maven repository
 
     ```
     mvn install:install-file -Dfile=./src/main/resources/lib/JavaBDD/javabdd_src_1.0b2.jar -DpomFile=./src/main/resources/lib/JavaBDD/pom.xml
     ```
 
-3. Execute `mvn clean install -DskipTests`
+6. Execute `mvn clean install -DskipTests`

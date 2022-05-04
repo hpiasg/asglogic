@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!--
-Copyright 2017 Norman Kluge
+Copyright 2017 - 2018 Norman Kluge
  
 This file is part of ASGlogic.
  
@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with ASGlogic.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<Configuration>
+<Configuration shutdownHook="disable">
 	<Loggers>
 		<Root level="off" />
 	</Loggers>

@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.netlist;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -34,7 +34,7 @@ public class NetlistTerm {
     private static final Logger logger = LogManager.getLogger();
 
     public enum NetlistTermAnnotation {
-        rstNew, rstPart
+        rstNew, rstPart, unsafeAndDeco
     }
 
     private BDD                            bdd;
@@ -94,10 +94,20 @@ public class NetlistTerm {
      * @return 0: okay, 1: newbdd already in index, -1 not okay
      */
     int replace(NetlistVariable replacement, NetlistVariable obsolete) {
-        if(mapping != null) {
-            logger.error("Term is already mapped");
-            return -1;
+//        if(mapping != null) {
+//            logger.error("Term is already mapped");
+//            return -1;
+//        }
+        if(drivee == obsolete) {
+            drivee.setDriver(null);
+            changeDrivee(replacement);
+            replacement.setDriver(this);
         }
+
+        if(mapping != null) {
+            mapping.replaceVar(replacement, obsolete);
+        }
+
         Set<NetlistVariable> vars = BDDHelper.getVars(bdd, netlist);
         if(vars.contains(obsolete)) {
             BDD oldbdd = bdd;
@@ -110,6 +120,7 @@ public class NetlistTerm {
 //			System.out.println("Now " + toString());
             return netlist.updateTermBDDIndex(oldbdd);
         }
+
         return 0;
     }
 
@@ -153,7 +164,7 @@ public class NetlistTerm {
         return loopVar;
     }
 
-    void addAnnotation(NetlistTermAnnotation annot) {
+    public void addAnnotation(NetlistTermAnnotation annot) {
         annotations.add(annot);
     }
 

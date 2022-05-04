@@ -1,7 +1,7 @@
 package de.uni_potsdam.hpi.asg.logictool.mapping;
 
 /*
- * Copyright (C) 2014 - 2015 Norman Kluge
+ * Copyright (C) 2014 - 2018 Norman Kluge
  * 
  * This file is part of ASGlogic.
  * 
@@ -28,6 +28,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,14 +45,14 @@ import de.uni_potsdam.hpi.asg.logictool.mapping.model.GateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.IntermediateGateMapping;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.MapPairing;
 import de.uni_potsdam.hpi.asg.logictool.mapping.model.NoMapping;
+import de.uni_potsdam.hpi.asg.logictool.mapping.model.WireMapping;
 import de.uni_potsdam.hpi.asg.logictool.netlist.Netlist;
-import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem;
+import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistBuffer;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
+import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.CElementSynthesis;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.Synthesis;
-import de.uni_potsdam.hpi.asg.logictool.synthesis.function.CElementFunctionSynthesis.ComplementaryDecision;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
+import de.uni_potsdam.hpi.asg.logictool.synthesis.AdvancedSynthesis;
 import de.uni_potsdam.hpi.asg.logictool.techfile.Gate;
 import de.uni_potsdam.hpi.asg.logictool.techfile.TechLibrary;
 import de.uni_potsdam.hpi.asg.logictool.techfile.booleanparser.model.TechVariable;
@@ -56,8 +63,9 @@ public class TechnologyMapper {
     private static final Logger            logger = LogManager.getLogger();
 
     private TechLibrary                    techlib;
+    private StateGraph                     stateGraph;
     private Netlist                        netlist;
-    private Synthesis                      syn;
+    private AdvancedSynthesis              syn;
     private boolean                        unsafeanddeco;
 
     private SequenceBasedAndGateDecomposer seqanddeco;
@@ -65,8 +73,9 @@ public class TechnologyMapper {
     private OrGateDecomposer               ordeco;
     private Set<NetlistTerm>               unmappableTerms;
 
-    public TechnologyMapper(StateGraph stateGraph, Netlist netlist, TechLibrary techlib, Synthesis syn, boolean unsafeanddeco) {
+    public TechnologyMapper(StateGraph stateGraph, Netlist netlist, TechLibrary techlib, AdvancedSynthesis syn, boolean unsafeanddeco) {
         this.netlist = netlist;
+        this.stateGraph = stateGraph;
         this.techlib = techlib;
         this.syn = syn;
         this.seqanddeco = new SequenceBasedAndGateDecomposer(stateGraph, netlist);
@@ -77,11 +86,21 @@ public class TechnologyMapper {
     }
 
     public boolean mapAll() {
+        if(!cleanNetlist()) {
+            return false;
+        }
+
         int decomposings = 0;
         do {
             internalMap();
             decomposings = decompose();
         } while(decomposings > 0);
+
+        if(unsafeanddeco) {
+            if(!checkArbitraryAndDecomposerHighLow()) {
+                return false;
+            }
+        }
 
         if(!fixComplementaryNetworksForUnmappedSignals()) {
             logger.error("Complementary mapping failed");
@@ -104,101 +123,137 @@ public class TechnologyMapper {
         return true;
     }
 
-    private boolean fixComplementaryNetworksForUnmappedSignals() {
-        if(netlist.getUnmappedTerms().isEmpty()) {
-            return true;
-        }
-        CElementSynthesis syn2 = null;
-        if(syn instanceof CElementSynthesis) {
-            syn2 = (CElementSynthesis)syn;
-        }
-        if(syn2 == null) {
-            logger.warn("Complementary networks mapping is just implemented for CElem synthesis");
-            return false;
-        }
-
-        for(NetlistTerm term : netlist.getUnmappedTerms()) {
-            Set<Signal> signals = netlist.getDrivenSignalsTransitive(term);
-            if(signals.isEmpty()) {
-                logger.warn("Signal for term " + term + " not found");
-                return false;
-            } else if(signals.size() > 1) {
-                logger.warn("Term " + term + " drives more than one signal. This is not yet supported");
-                return false;
+    private boolean cleanNetlist() {
+        Set<NetlistTerm> neededTerms = new HashSet<>();
+        for(Signal sig : stateGraph.getAllSignals()) {
+            if(sig.isInternalOrOutput()) {
+                neededTerms.addAll(netlist.getDrivingNetworkTransitive(syn.getCelemImplVar().get(sig)));
+                neededTerms.addAll(netlist.getDrivingNetworkTransitive(syn.getHighImplVar().get(sig)));
+                neededTerms.addAll(netlist.getDrivingNetworkTransitive(syn.getLowImplVar().get(sig)));
             }
-            Signal sig = signals.iterator().next();
-
-            if(syn2.getNetworksComplementaryMap().get(sig) == ComplementaryDecision.NONE) {
-                logger.error("Complementary mapping of signal " + sig.getName() + " failed");
-                continue;
+        }
+        Set<NetlistTerm> removeTerms = new HashSet<>();
+        for(NetlistTerm term : netlist.getTerms()) {
+            if(!neededTerms.contains(term)) {
+                removeTerms.add(term);
             }
+        }
+        for(NetlistTerm term : removeTerms) {
+            logger.debug("Removing term " + term.toString());
+            netlist.removeTerm(term);
+        }
+        return true;
+    }
 
-            NetlistTerm celemterm = netlist.getNetlistVariableBySignal(sig).getDriver();
-            if(!(celemterm instanceof NetlistCelem)) {
-                logger.error("Signal " + sig.getName() + " is not driven by an Celem");
-                return false;
-            }
-            NetlistCelem celem = (NetlistCelem)celemterm;
-            Set<NetlistTerm> setNetwork = netlist.getDrivingNetworkTransitive(celem.getSetInput());
-            Set<NetlistTerm> resetNetwork = netlist.getDrivingNetworkTransitive(celem.getResetInput());
-
-            if(setNetwork.contains(term) && resetNetwork.contains(term)) {
-                logger.error("Term is part of both Set- and Reset-Network");
-                return false;
-            } else if(setNetwork.contains(term)) {
-                // this unmappable term is part of set network
-                if(syn2.getNetworksComplementaryMap().get(sig) == ComplementaryDecision.SETONLY) {
-                    logger.error("Complementary mapping of signal " + sig.getName() + " failed");
-                    continue;
-                }
-                // check if reset network is fully mapped
-                boolean allmapped = true;
-                for(NetlistTerm t2 : resetNetwork) {
-                    if(netlist.getUnmappedTerms().contains(t2)) {
-                        allmapped = false;
-                        break;
+    // dont use high/low implementations if arbitrary(unsafe) and deco was applied - they usually dont work
+    private boolean checkArbitraryAndDecomposerHighLow() {
+        for(Signal sig : stateGraph.getAllSignals()) {
+            if(sig.isInternalOrOutput()) {
+                if(syn.getHighCubesImplementable().get(sig)) {
+                    Set<NetlistTerm> terms = netlist.getDrivingNetworkTransitive(syn.getHighImplVar().get(sig));
+                    for(NetlistTerm t : terms) {
+                        if(t.containsAnnotation(NetlistTermAnnotation.unsafeAndDeco)) {
+                            syn.getHighCubesImplementable().put(sig, false);
+                            break;
+                        }
                     }
                 }
-                if(allmapped) {
-                    netlist.addMapping(new NoMapping(term));
-                } else {
-                    logger.error("Complementary mapping of signal " + sig.getName() + " failed");
-                    return false;
-                }
-            } else if(resetNetwork.contains(term)) {
-                // this unmappable term is part of reset network
-                if(syn2.getNetworksComplementaryMap().get(sig) == ComplementaryDecision.RESETONLY) {
-                    logger.error("Complementary mapping of signal " + sig.getName() + " failed");
-                    continue;
-                }
-                // check if set network is fully mapped
-                boolean allmapped = true;
-                for(NetlistTerm t2 : setNetwork) {
-                    if(netlist.getUnmappedTerms().contains(t2)) {
-                        allmapped = false;
-                        break;
+                if(syn.getLowCubesImplementable().get(sig)) {
+                    Set<NetlistTerm> terms = netlist.getDrivingNetworkTransitive(syn.getLowImplVar().get(sig));
+                    for(NetlistTerm t : terms) {
+                        if(t.containsAnnotation(NetlistTermAnnotation.unsafeAndDeco)) {
+                            syn.getLowCubesImplementable().put(sig, false);
+                            break;
+                        }
                     }
                 }
-                if(allmapped) {
-                    netlist.addMapping(new NoMapping(term));
-                } else {
-                    logger.error("Complementary mapping of signal " + sig.getName() + " failed");
-                    return false;
-                }
-            } else {
-                logger.error("Term should be part of (Re)Set-Network");
-                return false;
             }
         }
         return true;
     }
 
+    private boolean fixComplementaryNetworksForUnmappedSignals() {
+        if(netlist.getUnmappedTerms().isEmpty()) {
+            return true;
+        }
+
+        Set<NetlistTerm> markForNoMapping = new HashSet<>();
+        for(Signal sig : stateGraph.getAllSignals()) {
+            if(sig.isInternalOrOutput()) {
+                Set<NetlistTerm> celemMissing = getUnmappedForTerm(syn.getCelemImplVar().get(sig));
+                if(!celemMissing.isEmpty()) {
+                    syn.getCelemCubesImplementable().put(sig, false);
+                }
+
+                Set<NetlistTerm> highMissing = null;
+                if(syn.getHighCubesImplementable().get(sig)) {
+                    highMissing = getUnmappedForTerm(syn.getHighImplVar().get(sig));
+                    if(!highMissing.isEmpty()) {
+                        syn.getHighCubesImplementable().put(sig, false);
+                    }
+                }
+
+                Set<NetlistTerm> lowMissing = null;
+                if(syn.getLowCubesImplementable().get(sig)) {
+                    lowMissing = getUnmappedForTerm(syn.getLowImplVar().get(sig));
+                    if(!lowMissing.isEmpty()) {
+                        syn.getLowCubesImplementable().put(sig, false);
+                    }
+                }
+
+                if(!syn.getCelemCubesImplementable().get(sig) && !syn.getHighCubesImplementable().get(sig) && !syn.getLowCubesImplementable().get(sig)) {
+                    logger.error("Complementary mapping of signal " + sig.getName() + " failed");
+                    return false;
+                }
+
+                markForNoMapping.addAll(celemMissing);
+                if(highMissing != null) {
+                    markForNoMapping.addAll(highMissing);
+                }
+                if(lowMissing != null) {
+                    markForNoMapping.addAll(lowMissing);
+                }
+            }
+        }
+
+        for(NetlistTerm term : markForNoMapping) {
+            netlist.addMapping(new NoMapping(term));
+        }
+
+        return true;
+    }
+
+    private Set<NetlistTerm> getUnmappedForTerm(NetlistVariable var) {
+        Set<NetlistTerm> terms = netlist.getDrivingNetworkTransitive(var);
+        Set<NetlistTerm> missing = new HashSet<>(terms);
+        missing.retainAll(netlist.getUnmappedTerms());
+        return missing;
+    }
+
     private int decompose() {
         int numOfDeco = 0;
-        for(NetlistTerm term : new ArrayList<>(netlist.getUnmappedTerms())) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        for(final NetlistTerm term : new ArrayList<>(netlist.getUnmappedTerms())) {
             if(!unmappableTerms.contains(term)) {
                 if(BDDHelper.isAndGate(term.getBdd())) {
-                    if(seqanddeco.decomposeAND(term)) {
+                    Callable<Boolean> task = new Callable<Boolean>() {
+                        public Boolean call() {
+                            return seqanddeco.decomposeAND(term);
+                        }
+                    };
+                    Future<Boolean> future = executor.submit(task);
+                    boolean result = false;
+                    try {
+                        result = future.get(10, TimeUnit.SECONDS);
+                    } catch(TimeoutException ex) {
+                        logger.debug("SeqBaseAndDeco: " + term.toString() + " timeout");
+                    } catch(InterruptedException e) {
+                    } catch(ExecutionException e) {
+                    } finally {
+                        future.cancel(true); // may or may not desire this
+                    }
+
+                    if(result) {
                         numOfDeco++;
                     } else {
                         if(unsafeanddeco) {
@@ -219,6 +274,7 @@ public class TechnologyMapper {
                 }
             }
         }
+        executor.shutdown();
         return numOfDeco;
     }
 
@@ -234,6 +290,14 @@ public class TechnologyMapper {
     }
 
     public boolean map(NetlistTerm func) {
+        if(func instanceof NetlistBuffer) {
+            NetlistBuffer buf = (NetlistBuffer)func;
+            Set<NetlistTerm> terms = new HashSet<>();
+            terms.add(buf);
+            netlist.addMapping(new WireMapping(buf.getInpvar(), buf.getDrivee(), netlist, terms));
+            return true;
+        }
+
         IntermediateGateMapping igmapping = map(func.getBdd(), func.getLoopVar(), func.buildingLoopbackAllowed());
         if(igmapping == null) {
             return false;

@@ -64,13 +64,13 @@ import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistCelem;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistTerm.NetlistTermAnnotation;
 import de.uni_potsdam.hpi.asg.logictool.netlist.NetlistVariable;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.State;
-import de.uni_potsdam.hpi.asg.logictool.srgraph.StateGraph;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.State;
+import de.uni_potsdam.hpi.asg.common.stggraph.stategraph.StateGraph;
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 import net.sf.javabdd.JFactory;
 
-public class SequenceBasedAndGateDecomposer {
+public class SequenceBasedAndGateDecomposer implements AndGateDecomposer {
     private static final Logger                 logger = LogManager.getLogger();
 
     private Netlist                             netlist;
@@ -94,6 +94,7 @@ public class SequenceBasedAndGateDecomposer {
         this.sghelper = new AndDecoSGHelper(stategraph.getSTG().getFile());
     }
 
+    @Override
     public boolean decomposeAND(NetlistTerm term) {
 
         logger.info("Decomposition of " + term.toString());
